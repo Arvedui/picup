@@ -16,20 +16,15 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
-from PyQt5.QtWidgets import QMainWindow, QInputDialog
 
-from picup.functions import load_ui
+from PyQt5.QtCore import QSettings
 
-from picup.functions import get_api_key
-
+import logging
 
 
-class MainWindow(QMainWindow):
+def get_QSettings():
+    settings = QSettings()
+    settings.setIniCodec('utf-8')
+    logging.info('QSettings format set to: %s' % settings.format())
+    return settings
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        load_ui('MainWindow.ui', self)
-        self.apikey = get_api_key(self)
-
-        self.pushButton_close.clicked.connect(self.close)

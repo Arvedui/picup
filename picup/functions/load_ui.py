@@ -1,11 +1,11 @@
 # -*- coding:utf8 -*-
 ######################## BEGIN LICENSE BLOCK ########################
-# picup - small gui tool, for uploadding picture to picflash
+# picup - small gui tool for uploading pictures to picflash
 # Copyright (C) 2014  Arvedui
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation; either version 2 of the License.
+# published by the Free Software Foundation; version 2 of the License.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
@@ -26,8 +26,8 @@ import logging
 from os import path
 from PyQt5.uic import loadUi
 
+from picup.globals import BASEDIR
 
-BASEDIR = path.dirname(path.abspath(sys.argv[0]))
 UI_DIR = path.join(BASEDIR, 'picup', 'ui_files')
 
 

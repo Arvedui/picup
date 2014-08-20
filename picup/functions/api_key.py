@@ -16,20 +16,33 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
-from PyQt5.QtWidgets import QMainWindow, QInputDialog
 
-from picup.functions import load_ui
-
-from picup.functions import get_api_key
-
+from picup.functions.misc import get_QSettings
+from picup.globals import DEFAULT_API_KEY
+#from picup.model import KeyRequest
 
 
-class MainWindow(QMainWindow):
+import logging
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+def get_api_key(parent):
+    settings = get_QSettings()
+    if settings.contains('apikey'):
+        apikey = settings.value('apikey')
+    else:
+        apikey = request_api_key(parent, settings)
 
-        load_ui('MainWindow.ui', self)
-        self.apikey = get_api_key(self)
+    logging.debug('Using api key: %s' % apikey)
+    return apikey
 
-        self.pushButton_close.clicked.connect(self.close)
+
+def request_api_key(parent, settings):
+    window = KeyRequest(parent)
+    if window.exec_():
+        apikey = window.lineEdit_apikey.text()
+        settings.setValue('apikey', apikey)
+        return apikey
+
+    return DEFAULT_API_KEY
+
+
+
