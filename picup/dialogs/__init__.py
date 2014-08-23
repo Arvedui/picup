@@ -17,5 +17,5 @@
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
 
-from picup.model.main_window import MainWindow
-from picup.model.key_request import KeyRequest
+from picup.dialogs.key_request import KeyRequest
+

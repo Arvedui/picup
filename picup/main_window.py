@@ -16,12 +16,15 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
-from PyQt5.QtWidgets import QMainWindow, QInputDialog
+from PyQt5.QtWidgets import QMainWindow, QInputDialog, QFileDialog
 
 from picup.functions import load_ui
-
 from picup.functions import get_api_key
+#import picup.model.key_request
 
+from picup.globals import SUPPORTED_FILE_TYPES
+
+import logging
 
 
 class MainWindow(QMainWindow):
@@ -32,4 +35,21 @@ class MainWindow(QMainWindow):
         load_ui('MainWindow.ui', self)
         self.apikey = get_api_key(self)
 
+        self.files = []
+
         self.pushButton_close.clicked.connect(self.close)
+        self.pushButton_add_picture.clicked.connect(self.add_file)
+        print()
+
+
+    def add_file(self,):
+        dialog = QFileDialog(parent=self)
+        dialog.setFileMode(QFileDialog.ExistingFiles)
+        dialog.setNameFilters(SUPPORTED_FILE_TYPES)
+
+        if dialog.exec_():
+            self.files.extend(dialog.selectedFiles())
+
+
+class FileListModel():
+    pass

@@ -17,14 +17,25 @@
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
 
+import json
+
+import picup
+
 from picup.functions.misc import get_QSettings
 from picup.globals import DEFAULT_API_KEY
-#from picup.model import KeyRequest
+from picup.dialogs import KeyRequest
+#import picup.model.key_request
+#import picup.model.key_request
 
+#picup.KeyRequest
+
+
+#print(json.dumps(str(locals())))
 
 import logging
 
 def get_api_key(parent):
+    #return '4UK55Y0D'
     settings = get_QSettings()
     if settings.contains('apikey'):
         apikey = settings.value('apikey')
@@ -36,7 +47,7 @@ def get_api_key(parent):
 
 
 def request_api_key(parent, settings):
-    window = KeyRequest(parent)
+    window = KeyRequest(parent=parent)
     if window.exec_():
         apikey = window.lineEdit_apikey.text()
         settings.setValue('apikey', apikey)

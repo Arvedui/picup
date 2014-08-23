@@ -24,3 +24,8 @@ from os import path
 BASEDIR = path.dirname(path.abspath(sys.argv[0]))
 
 DEFAULT_API_KEY = 'f4Shgrf6E'
+
+SUPPORTED_FILE_TYPES = (
+                'Erlaubte Formate (*.png *.jpg *.jpeg *.gif *.pdf)',
+                'Alle Datein (*)'
+                )
