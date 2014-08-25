@@ -24,13 +24,6 @@ import picup
 from picup.functions.misc import get_QSettings
 from picup.globals import DEFAULT_API_KEY
 from picup.dialogs import KeyRequest
-#import picup.model.key_request
-#import picup.model.key_request
-
-#picup.KeyRequest
-
-
-#print(json.dumps(str(locals())))
 
 import logging
 

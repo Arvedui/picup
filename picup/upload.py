@@ -41,7 +41,7 @@ class Upload(QObject, PicflashUpload):
 
         for file_ in files:
             instance.processEvents()
-            links = self.upload(file_)
+            links = self.upload(file_)[0]
             self.picture_uploaded.emit((file_, links))
             logging.info('Uploaded %s', file_)
             instance.processEvents()

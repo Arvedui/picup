@@ -18,4 +18,3 @@
 ######################### END LICENSE BLOCK #########################
 
 from picup.dialogs.key_request import KeyRequest
-from picup.dialogs.show_links import ShowLinks

@@ -16,15 +16,14 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
-from PyQt5.QtWidgets import (QMainWindow, QInputDialog, QFileDialog,
-                             QProgressDialog)
+from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from PyQt5.QtCore import QAbstractListModel, Qt, QModelIndex, QThread
 
 from picup.functions import load_ui
 from picup.functions import get_api_key
 from picup.upload import Upload
 from picup.globals import SUPPORTED_FILE_TYPES
-from picup.dialogs import ShowLinks
+from picup.dialogs.show_links import ShowLinks
 
 import logging
 
@@ -37,38 +36,41 @@ class MainWindow(QMainWindow):
         load_ui('MainWindow.ui', self)
         apikey = get_api_key(self)
         self.upload_thread = QThread()
+        self.upload_thread.start()
         self.upload = Upload(apikey=apikey)
         self.upload.moveToThread(self.upload_thread)
-        self.upload_thread.start()
 
-
-        self.listView_files.setModel(FileListModel())
+        self.listView_files_model = FileListModel()
+        self.listView_files.setModel(self.listView_files_model)
 
         self.pushButton_close.clicked.connect(self.close)
         self.pushButton_add_picture.clicked.connect(self.add_file)
         self.pushButton_upload.clicked.connect(self.start_upload)
 
-        self.upload.picture_uploaded.connect(self.update_status_dialog)
-
         self.dialog = QFileDialog(parent=self)
         self.dialog.setFileMode(QFileDialog.ExistingFiles)
         self.dialog.setNameFilters(SUPPORTED_FILE_TYPES)
-
-
 
     def add_file(self):
 
         if self.dialog.exec_():
             files = self.dialog.selectedFiles()
-            model = self.listView_files.model()
-            model.add_files(files)
+            self.listView_files_model.add_files(files)
 
     def start_upload(self,):
-        model = self.listView_files.model()
-        link_dialog = ShowLinks(self.upload, len(model.files), parent=self)
-        link_dialog.show()
+        if len(self.listView_files_model.files):
+            link_dialog = ShowLinks(self.upload,
+                                    len(self.listView_files_model.files),
+                                    parent=self)
+            link_dialog.show()
 
-        self.upload.upload_pictures.emit(model.files)
+            self.upload.upload_pictures.emit(self.listView_files_model.files)
+            self.clear_list()
+        else:
+            logging.debug('There is nothing to upload.')
+
+    def clear_list(self):
+        self.listView_files_model.clear_list()
 
 
 
@@ -92,3 +94,8 @@ class FileListModel(QAbstractListModel):
         self.beginInsertRows(QModelIndex(), prev_len, prev_len + len(files))
         self.files.extend(files)
         self.endInsertRows()
+
+    def clear_list(self,):
+        self.beginRemoveRows(QModelIndex(), 0, len(self.files)-1)
+        self.files.clear()
+        self.endRemoveRows()

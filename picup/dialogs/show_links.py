@@ -17,12 +17,14 @@
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
 
-from PyQt5.QtWidgets import QDialog, QAbstractItemDelegate, QListView
+from os import path
+from PyQt5.QtWidgets import QDialog, QAbstractItemDelegate, QListView, QVBoxLayout, QWidget
 from PyQt5.QtCore import QAbstractListModel, QModelIndex, Qt
 from PyQt5.QtGui import QPixmap
 
 from picup.functions import load_ui, load_ui_factory
 
+LINK_WIDGET_UI_CLASS, LINK_WIDGET_BASE_CLASS = load_ui_factory('LinkWidget.ui')
 
 class ShowLinks(QDialog):
 
@@ -30,15 +32,18 @@ class ShowLinks(QDialog):
         super().__init__(**kwargs)
         load_ui('LinkDialog.ui', self)
 
+        self.entrys = []
         self.upload_thread = upload_thread
+        self.central_widget = QWidget(self)
+        self.scrollArea.setWidget(self.central_widget)
         self.progressBar_upload.setMaximum(amount_links)
+        self.scroll_area_layout = QVBoxLayout()
+        self.central_widget.setLayout(self.scroll_area_layout)
+        self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         self.upload_thread.picture_uploaded.connect(self.update_progress)
+        self.upload_thread.picture_uploaded.connect(self.add_entry)
         self.upload_thread.upload_finished.connect(self.upload_finished)
-
-        self.listView_links.setModel(LinkDisplayModel(self.upload_thread))
-        self.listView_links.setItemDelegate(LinkDisplayDelegate())
-        self.listView_links.setVerticalScrollMode(QListView.ScrollPerPixel)
 
     def update_progress(self):
         value = self.progressBar_upload.value()
@@ -50,63 +55,27 @@ class ShowLinks(QDialog):
         self.upload_thread.picture_uploaded.disconnect(self.update_progress)
         self.upload_thread.upload_finished.disconnect(self.upload_finished)
 
+    def add_entry(self, data):
+        self.entrys.append(data)
+        widget = LinkWidget(data, parent=self.central_widget)
 
-class LinkDisplayModel(QAbstractListModel):
+        self.scroll_area_layout.addWidget(widget)
 
-    def __init__(self, upload_thread, **kwargs):
+class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
+
+    def __init__(self, data, **kwargs):
         super().__init__(**kwargs)
-        self.upload_thread = upload_thread
-        self.file_links = []
+        self.setupUi(self)
+        filename, links = data
 
-        self.upload_thread.picture_uploaded.connect(self.add_entry)
-        self.upload_thread.upload_finished.connect(self.upload_finished)
+        self.groupBox.setTitle(path.split(filename)[1])
 
-    def upload_finished(self,):
-        self.upload_thread.picture_uploaded.disconnect(self.add_entry)
-        self.upload_thread.upload_finished.disconnect(self.upload_finished)
-
-    def add_entry(self, entry):
-        prev_len = len(self.file_links)
-
-        self.beginInsertRows(QModelIndex(), prev_len, prev_len + 1)
-        self.file_links.append(entry)
-        self.endInsertRows()
-
-    def rowCount(self, parent):
-        return len(self.file_links)
-
-    def data(self, index, role):
-
-        if role == Qt.DisplayRole:
-            return self.file_links[index.row()]
-
-
-class LinkDisplayDelegate(QAbstractItemDelegate):
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        ui_factory, self.widget_base_class = load_ui_factory('LinkWidget.ui')
-        self.ui_factory = ui_factory()
-
-        self.size = self.get_widget().size()
-
-    def get_widget(self,):
-        widget = self.widget_base_class()
-        self.ui_factory.setupUi(widget)
-
-        return widget
-
-    def sizeHint(self, item, index):
-        return self.size
-
-    def paint(self, painter, option, index):
-        widget = self.get_widget()
-        file_name, links = index.data()
         pixmap = QPixmap()
-        pixmap.load(file_name)
+        pixmap.load(filename)
+        self.pixmap = pixmap.scaled(139, 139, Qt.KeepAspectRatio)
+        self.label_picture.setPixmap(self.pixmap)
 
-        #widget.label_picture.setPixmap(pixmap)
-        #widget.lineEdit_sharelink.setText(links[0]['sharelink'])
-
-        widget.render(painter)
+        self.lineEdit_sharelink.setText(links['sharelink'])
+        self.lineEdit_hotlink.setText(links['hotlink'])
+        self.lineEdit_deletelink.setText('delete_url')
+        self.lineE
