@@ -77,5 +77,5 @@ class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
 
         self.lineEdit_sharelink.setText(links['sharelink'])
         self.lineEdit_hotlink.setText(links['hotlink'])
-        self.lineEdit_deletelink.setText('delete_url')
-        self.lineE
+        self.lineEdit_deletelink.setText(links['delete_url'])
+        self.lineEdit_preview.setText(links['thumbnail'])

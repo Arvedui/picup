@@ -27,7 +27,7 @@ from picup import MainWindow
 
 import logging
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+                    level=logging.ERROR)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
@@ -39,5 +39,3 @@ if __name__ == '__main__':
     window.show()
 
     sys.exit(app.exec_())
-
-
