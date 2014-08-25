@@ -35,7 +35,6 @@ from picup.dialogs import KeyRequest
 import logging
 
 def get_api_key(parent):
-    #return '4UK55Y0D'
     settings = get_QSettings()
     if settings.contains('apikey'):
         apikey = settings.value('apikey')

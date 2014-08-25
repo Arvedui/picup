@@ -20,24 +20,30 @@
 module for loding ui files
 """
 
-import sys
 import logging
 
 from os import path
-from PyQt5.uic import loadUi
+from PyQt5.uic import loadUi, loadUiType
 
 from picup.globals import BASEDIR
 
 UI_DIR = path.join(BASEDIR, 'picup', 'ui_files')
 
 
-def load_ui(file_name, baseinstance = None):
+def load_ui(file_name, baseinstance=None):
     """
     loads a ui file und return the resulting object
     """
 
     file_path = path.join(UI_DIR, file_name)
 
-    logging.info('load ui file %s' % file_path)
+    logging.info('load ui file %s', file_path)
 
     return loadUi(file_path, baseinstance)
+
+def load_ui_factory(file_name):
+    file_path = path.join(UI_DIR, file_name)
+
+    logging.info('create factory from %s', file_name)
+
+    return loadUiType(file_path)

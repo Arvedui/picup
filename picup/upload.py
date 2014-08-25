@@ -17,5 +17,34 @@
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
 
-from picup.dialogs.key_request import KeyRequest
-from picup.dialogs.show_links import ShowLinks
+from picuplib import Upload as PicflashUpload
+from PyQt5.QtCore import QThread, pyqtSignal, Qt, QObject
+from PyQt5.QtWidgets import QApplication
+
+import logging
+
+
+class Upload(QObject, PicflashUpload):
+
+    upload_pictures = pyqtSignal([list])
+    picture_uploaded = pyqtSignal(tuple)
+    upload_finished = pyqtSignal()
+
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.upload_pictures.connect(self.upload_multiple)
+
+    def upload_multiple(self, files):
+        instance = QApplication.instance()
+
+        for file_ in files:
+            instance.processEvents()
+            links = self.upload(file_)
+            self.picture_uploaded.emit((file_, links))
+            logging.info('Uploaded %s', file_)
+            instance.processEvents()
+
+        self.upload_finished.emit()
+
