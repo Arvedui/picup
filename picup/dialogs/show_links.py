@@ -72,10 +72,14 @@ class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
 
         pixmap = QPixmap()
         pixmap.load(filename)
-        self.pixmap = pixmap.scaled(139, 139, Qt.KeepAspectRatio)
+        self.pixmap = pixmap.scaled(120, 120, Qt.KeepAspectRatio)
         self.label_picture.setPixmap(self.pixmap)
 
         self.lineEdit_sharelink.setText(links['sharelink'])
+        self.lineEdit_sharelink.setCursorPosition(0)
         self.lineEdit_hotlink.setText(links['hotlink'])
+        self.lineEdit_hotlink.setCursorPosition(0)
         self.lineEdit_deletelink.setText(links['delete_url'])
+        self.lineEdit_deletelink.setCursorPosition(0)
         self.lineEdit_preview.setText(links['thumbnail'])
+        self.lineEdit_preview.setCursorPosition(0)
