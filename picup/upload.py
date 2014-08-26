@@ -27,12 +27,12 @@ import logging
 class Upload(QObject, PicflashUpload):
 
     upload_pictures = pyqtSignal([list])
-    picture_uploaded = pyqtSignal(tuple)
+    picture_uploaded = pyqtSignal([tuple])
     upload_finished = pyqtSignal()
 
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super(Upload, self).__init__(**kwargs)
 
         self.upload_pictures.connect(self.upload_multiple)
 

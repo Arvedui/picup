@@ -18,8 +18,8 @@
 ######################### END LICENSE BLOCK #########################
 
 from os import path
-from PyQt5.QtWidgets import QDialog, QAbstractItemDelegate, QListView, QVBoxLayout, QWidget
-from PyQt5.QtCore import QAbstractListModel, QModelIndex, Qt
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QWidget
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
 from picup.functions import load_ui, load_ui_factory
@@ -29,7 +29,7 @@ LINK_WIDGET_UI_CLASS, LINK_WIDGET_BASE_CLASS = load_ui_factory('LinkWidget.ui')
 class ShowLinks(QDialog):
 
     def __init__(self, upload_thread, amount_links, **kwargs):
-        super().__init__(**kwargs)
+        super(ShowLinks, self).__init__(**kwargs)
         load_ui('LinkDialog.ui', self)
 
         self.entrys = []
@@ -64,7 +64,7 @@ class ShowLinks(QDialog):
 class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
 
     def __init__(self, data, **kwargs):
-        super().__init__(**kwargs)
+        super(LinkWidget, self).__init__(**kwargs)
         self.setupUi(self)
         filename, links = data
 
@@ -76,10 +76,11 @@ class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
         self.label_picture.setPixmap(self.pixmap)
 
         self.lineEdit_sharelink.setText(links['sharelink'])
-        self.lineEdit_sharelink.setCursorPosition(0)
         self.lineEdit_hotlink.setText(links['hotlink'])
-        self.lineEdit_hotlink.setCursorPosition(0)
         self.lineEdit_deletelink.setText(links['delete_url'])
-        self.lineEdit_deletelink.setCursorPosition(0)
         self.lineEdit_preview.setText(links['thumbnail'])
+
+        self.lineEdit_sharelink.setCursorPosition(0)
+        self.lineEdit_hotlink.setCursorPosition(0)
+        self.lineEdit_deletelink.setCursorPosition(0)
         self.lineEdit_preview.setCursorPosition(0)
