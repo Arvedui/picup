@@ -26,17 +26,11 @@ from os import path
 from PyQt5.uic import loadUi, loadUiType
 from pkg_resources import resource_filename
 
-from picup.globals import BASEDIR
-
-UI_DIR = path.join(BASEDIR, 'picup', 'ui_files')
-
-
 def load_ui(file_name, baseinstance=None):
     """
     loads a ui file und return the resulting object
     """
     file_path = resource_filename('picup', path.join('ui_files', file_name))
-    print(file_path)
 
     logging.info('load ui file %s', file_path)
 
@@ -44,7 +38,6 @@ def load_ui(file_name, baseinstance=None):
 
 def load_ui_factory(file_name):
     file_path = resource_filename('picup', path.join('ui_files', file_name))
-    print(file_path)
 
     logging.info('create factory from %s', file_name)
 
