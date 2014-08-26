@@ -43,7 +43,8 @@ def load_ui(file_name, baseinstance=None):
     return loadUi(file_path, baseinstance)
 
 def load_ui_factory(file_name):
-    file_path = path.join(UI_DIR, file_name)
+    file_path = resource_filename('picup', path.join('ui_files', file_name))
+    print(file_path)
 
     logging.info('create factory from %s', file_name)
 
