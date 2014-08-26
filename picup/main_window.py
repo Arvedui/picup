@@ -78,14 +78,13 @@ class MainWindow(QMainWindow):
 
         else:
             logging.debug('There is nothing to upload.')
-            QMessageBox.information(self, 'Nüx', 'Es würden keine bilder zum hochladen hinzugefügt')
+            QMessageBox.information(self, 'Nüx da', 'Es würden keine bilder zum hochladen hinzugefügt')
 
     def clear_list(self):
         self.listView_files_model.clear_list()
 
     def upload_finished(self):
         self.upload_in_progress = False
-
 
 
 class FileListModel(QAbstractListModel):

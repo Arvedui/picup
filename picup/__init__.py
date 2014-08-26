@@ -17,4 +17,24 @@
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
 
+import sys
+
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtCore import QSettings
+
 from picup.main_window import MainWindow
+
+import logging
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
+                    level=logging.ERROR)
+
+def main():
+    app = QApplication(sys.argv)
+    app.setOrganizationName('Arvedui')
+    app.setApplicationName('picup')
+    QSettings.setDefaultFormat(QSettings.IniFormat)
+
+    window = MainWindow()
+    window.show()
+
+    sys.exit(app.exec_())
