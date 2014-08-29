@@ -17,7 +17,10 @@
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
 
-from PyQt5.QtCore import QSettings
+try:
+    from PyQt5.QtCore import QSettings
+except:
+    from PyQt4.QtCore import QSettings
 
 import logging
 

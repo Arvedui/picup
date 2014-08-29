@@ -16,8 +16,12 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox
-from PyQt5.QtCore import QAbstractListModel, Qt, QModelIndex, QThread
+try:
+    from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox
+    from PyQt5.QtCore import QAbstractListModel, Qt, QModelIndex, QThread
+except ImportError:
+    from PyQt4.QtGui import QMainWindow, QFileDialog, QMessageBox
+    from PyQt4.QtCore import QAbstractListModel, Qt, QModelIndex, QThread
 
 from picup.functions import load_ui
 from picup.functions import get_api_key

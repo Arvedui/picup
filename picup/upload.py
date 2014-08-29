@@ -18,8 +18,12 @@
 ######################### END LICENSE BLOCK #########################
 
 from picuplib import Upload as PicflashUpload
-from PyQt5.QtCore import QThread, pyqtSignal, Qt, QObject
-from PyQt5.QtWidgets import QApplication
+try:
+    from PyQt5.QtCore import QThread, pyqtSignal, Qt, QObject
+    from PyQt5.QtWidgets import QApplication
+except ImportError:
+    from PyQt4.QtCore import QThread, pyqtSignal, Qt, QObject
+    from PyQt4.QtGui import QApplication
 
 import logging
 
@@ -31,8 +35,10 @@ class Upload(QObject, PicflashUpload):
     upload_finished = pyqtSignal()
 
 
-    def __init__(self, **kwargs):
-        super(Upload, self).__init__(**kwargs)
+    def __init__(self, apikey):
+        #super(Upload, self).__init__(**kwargs)
+        QObject.__init__(self,)
+        PicflashUpload.__init__(self, apikey)
 
         self.upload_pictures.connect(self.upload_multiple)
 

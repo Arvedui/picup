@@ -19,14 +19,20 @@
 
 import sys
 
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QSettings
+try:
+    from PyQt5.QtWidgets import QApplication
+    from PyQt5.QtCore import QSettings
+except ImportError:
+    from PyQt4.QtGui import QApplication
+    from PyQt4.QtCore import QSettings
 
 from picup.main_window import MainWindow
 
 import logging
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
-                    level=logging.ERROR)
+                    level=logging.DEBUG)
+
+logging.info('ARRRRRG LOGGING NOT WORKING')
 
 def main():
     app = QApplication(sys.argv)

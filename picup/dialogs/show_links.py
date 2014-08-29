@@ -18,9 +18,13 @@
 ######################### END LICENSE BLOCK #########################
 
 from os import path
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QWidget
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
+try:
+    from PyQt5.QtWidgets import QDialog, QVBoxLayout, QWidget
+    from PyQt5.QtCore import Qt
+    from PyQt5.QtGui import QPixmap
+except ImportError:
+    from PyQt4.QtGui import QDialog, QVBoxLayout, QWidget, QPixmap
+    from PyQt4.QtCore import Qt
 
 from picup.functions import load_ui, load_ui_factory
 

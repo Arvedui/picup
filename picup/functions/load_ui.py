@@ -23,7 +23,10 @@ module for loding ui files
 import logging
 
 from os import path
-from PyQt5.uic import loadUi, loadUiType
+try:
+    from PyQt5.uic import loadUi, loadUiType
+except ImportError:
+    from PyQt4.uic import loadUi, loadUiType
 from pkg_resources import resource_filename
 
 def load_ui(file_name, baseinstance=None):
