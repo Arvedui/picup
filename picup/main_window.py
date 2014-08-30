@@ -42,9 +42,9 @@ class MainWindow(QMainWindow):
         apikey = get_api_key(self)
         self.upload_in_progress = False
         self.upload_thread = QThread()
-        self.upload_thread.start()
         self.upload = Upload(apikey=apikey)
-        self.upload.moveToThread(self.upload_thread)
+        self.upload.moveToThread(self.upload_thread.thread())
+        self.upload_thread.start()
 
         self.listView_files_model = FileListModel()
         self.listView_files.setModel(self.listView_files_model)
@@ -58,6 +58,8 @@ class MainWindow(QMainWindow):
         self.dialog = QFileDialog(parent=self)
         self.dialog.setFileMode(QFileDialog.ExistingFiles)
         self.dialog.setNameFilters(SUPPORTED_FILE_TYPES)
+
+
 
     def add_file(self):
 

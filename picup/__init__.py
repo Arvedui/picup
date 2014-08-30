@@ -23,6 +23,17 @@ try:
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtCore import QSettings
 except ImportError:
+    # setting PyQt apiversion to 2, where possible
+    import sip
+    sip.setapi('QDate v1', 2)
+    sip.setapi('QDateTime v1', 2)
+    sip.setapi('QString v1', 2)
+    sip.setapi('QTextStream v1', 2)
+    sip.setapi('QTime v1', 2)
+    sip.setapi('QUrl v1', 2)
+    sip.setapi('QVariant v1', 2)
+
+
     from PyQt4.QtGui import QApplication
     from PyQt4.QtCore import QSettings
 
@@ -32,7 +43,6 @@ import logging
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.DEBUG)
 
-logging.info('ARRRRRG LOGGING NOT WORKING')
 
 def main():
     app = QApplication(sys.argv)

@@ -28,7 +28,7 @@ except ImportError:
 import logging
 
 
-class Upload(QObject, PicflashUpload):
+class Upload(QObject):
 
     upload_pictures = pyqtSignal([list])
     picture_uploaded = pyqtSignal([tuple])
@@ -36,9 +36,8 @@ class Upload(QObject, PicflashUpload):
 
 
     def __init__(self, apikey):
-        #super(Upload, self).__init__(**kwargs)
-        QObject.__init__(self,)
-        PicflashUpload.__init__(self, apikey)
+        QObject.__init__(self, parent=None,)
+        self.upload = PicflashUpload(apikey=apikey)
 
         self.upload_pictures.connect(self.upload_multiple)
 
@@ -47,7 +46,7 @@ class Upload(QObject, PicflashUpload):
 
         for file_ in files:
             instance.processEvents()
-            links = self.upload(file_)[0]
+            links = self.upload.upload(file_)[0]
             self.picture_uploaded.emit((file_, links))
             logging.info('Uploaded %s', file_)
             instance.processEvents()
