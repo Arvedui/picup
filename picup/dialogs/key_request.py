@@ -28,7 +28,7 @@ from picup.functions import load_ui
 class KeyRequest(QDialog):
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super(KeyRequest, self).__init__(**kwargs)
 
         load_ui('KeyRequest.ui', self)
 
