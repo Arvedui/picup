@@ -29,6 +29,8 @@ except ImportError:
     from PyQt4.uic import loadUi, loadUiType
 from pkg_resources import resource_filename
 
+from picup.functions.misc import get_file_path
+
 def load_ui(file_name, baseinstance=None):
     """
     loads a ui file und return the resulting object
@@ -40,7 +42,7 @@ def load_ui(file_name, baseinstance=None):
     return loadUi(file_path, baseinstance)
 
 def load_ui_factory(file_name):
-    file_path = resource_filename('picup', path.join('ui_files', file_name))
+    file_path = get_file_path(path.join('ui_files', file_name))
 
     logging.info('create factory from %s', file_name)
 

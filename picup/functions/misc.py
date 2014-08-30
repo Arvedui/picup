@@ -17,12 +17,17 @@
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
 
+import logging
+import sys
+import os.path
+
 try:
     from PyQt5.QtCore import QSettings
 except:
     from PyQt4.QtCore import QSettings
 
-import logging
+from pkg_resources import resource_filename
+
 
 
 def get_QSettings():
@@ -31,3 +36,9 @@ def get_QSettings():
     logging.info('QSettings format set to: %s' % settings.format())
     return settings
 
+def get_file_path(relativ_path):
+
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relativ_path)
+    else:
+        return resource_filename('picup', relativ_path)
