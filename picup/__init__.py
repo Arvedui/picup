@@ -25,13 +25,13 @@ try:
 except ImportError:
     # setting PyQt apiversion to 2, where possible
     import sip
-    sip.setapi('QDate v1', 2)
-    sip.setapi('QDateTime v1', 2)
-    sip.setapi('QString v1', 2)
-    sip.setapi('QTextStream v1', 2)
-    sip.setapi('QTime v1', 2)
-    sip.setapi('QUrl v1', 2)
-    sip.setapi('QVariant v1', 2)
+    sip.setapi('QDate', 2)
+    sip.setapi('QDateTime', 2)
+    sip.setapi('QString', 2)
+    sip.setapi('QTextStream', 2)
+    sip.setapi('QTime', 2)
+    sip.setapi('QUrl', 2)
+    sip.setapi('QVariant', 2)
 
 
     from PyQt4.QtGui import QApplication
