@@ -16,6 +16,7 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
+from __future__ import unicode_literals
 try:
     from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox
     from PyQt5.QtCore import QAbstractListModel, Qt, QModelIndex, QThread

@@ -18,7 +18,7 @@
 ######################### END LICENSE BLOCK #########################
 
 import json
-
+import sys
 import picup
 
 from picup.functions.misc import get_QSettings
@@ -42,10 +42,12 @@ def request_api_key(parent, settings):
     window = KeyRequest(parent=parent)
     if window.exec_():
         apikey = window.lineEdit_apikey.text()
-        settings.setValue('apikey', apikey)
-        return apikey
+        if apikey:
+            settings.setValue('apikey', apikey)
+            return apikey
+        return DEFAULT_API_KEY
 
-    return DEFAULT_API_KEY
+    sys.exit(0)
 
 
 
