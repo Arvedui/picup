@@ -30,9 +30,10 @@ import logging
 
 class Upload(QObject):
 
-    upload_pictures = pyqtSignal([list])
-    picture_uploaded = pyqtSignal([tuple])
+    upload_pictures = pyqtSignal(list)
+    picture_uploaded = pyqtSignal(tuple)
     upload_finished = pyqtSignal()
+    upload_error = pyqtSignal(type, tuple)
 
 
     def __init__(self, apikey):
@@ -46,9 +47,14 @@ class Upload(QObject):
 
         for file_ in files:
             instance.processEvents()
-            links = self.upload.upload(file_)[0]
-            self.picture_uploaded.emit((file_, links))
-            logging.info('Uploaded %s', file_)
+            try:
+                links = self.upload.upload(file_)[0]
+                self.picture_uploaded.emit((file_, links))
+                logging.info('Uploaded %s', file_)
+            except Exception as e: # yes in know its bad, but catching every possbile exception is necessary here
+                self.upload_error.emit(type(e), e.args)
+                return False
+
             instance.processEvents()
 
         self.upload_finished.emit()

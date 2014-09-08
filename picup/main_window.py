@@ -18,10 +18,11 @@
 ######################### END LICENSE BLOCK #########################
 from __future__ import unicode_literals
 try:
-    from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox
+    from PyQt5.QtWidgets import (QMainWindow, QFileDialog, QMessageBox,
+                                 QMessageBox)
     from PyQt5.QtCore import QAbstractListModel, Qt, QModelIndex, QThread
 except ImportError:
-    from PyQt4.QtGui import QMainWindow, QFileDialog, QMessageBox
+    from PyQt4.QtGui import QMainWindow, QFileDialog, QMessageBox, QMessageBox
     from PyQt4.QtCore import QAbstractListModel, Qt, QModelIndex, QThread
 
 from picup.functions import load_ui
@@ -53,8 +54,11 @@ class MainWindow(QMainWindow):
         self.pushButton_close.clicked.connect(self.close)
         self.pushButton_add_picture.clicked.connect(self.add_file)
         self.pushButton_upload.clicked.connect(self.start_upload)
+        self.pushButton_clear_list.clicked.connect(
+                                        self.listView_files_model.clear_list)
 
         self.upload.upload_finished.connect(self.upload_finished)
+        self.upload.upload_error.connect(self.handle_error)
 
         self.dialog = QFileDialog(parent=self)
         self.dialog.setFileMode(QFileDialog.ExistingFiles)
@@ -85,13 +89,21 @@ class MainWindow(QMainWindow):
 
         else:
             logging.debug('There is nothing to upload.')
-            QMessageBox.information(self, 'Nüx da', 'Es würden keine bilder zum hochladen hinzugefügt')
+            QMessageBox.information(self, 'Nüx da', 'Es wurden keine bilder zum hochladen hinzugefügt')
 
     def clear_list(self):
         self.listView_files_model.clear_list()
 
     def upload_finished(self):
         self.upload_in_progress = False
+
+    def handle_error(self, exception_type, args):
+        message = QMessageBox(QMessageBox.Warning, 'Fehler',
+                              'Fehler beim upload.', buttons=QMessageBox.Ok,
+                              parent=self)
+        message.setDetailedText(repr(exception_type) + '\n' + repr(args))
+
+        message.exec_()
 
 
 class FileListModel(QAbstractListModel):

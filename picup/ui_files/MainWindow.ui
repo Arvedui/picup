@@ -56,9 +56,9 @@
      <widget class="QListView" name="listView_files"/>
     </item>
     <item row="3" column="1">
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="pushButton_clear_list">
       <property name="text">
-       <string>PushButton</string>
+       <string>Liste leeren</string>
       </property>
      </widget>
     </item>
