@@ -25,7 +25,7 @@ setup(
     classifiers=[
         'Development Status :: 4 - Beta',
         'Topic :: Software Development :: Libraries',
-        'Intended Audience :: End Users/Desktop'
+        'Intended Audience :: End Users/Desktop',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX',

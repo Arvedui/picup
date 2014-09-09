@@ -56,6 +56,7 @@ class MainWindow(QMainWindow):
         self.pushButton_upload.clicked.connect(self.start_upload)
         self.pushButton_clear_list.clicked.connect(
                                         self.listView_files_model.clear_list)
+        self.pushButton_remove_selected.clicked.connect(self.remove_selected)
 
         self.upload.upload_finished.connect(self.upload_finished)
         self.upload.upload_error.connect(self.handle_error)
@@ -105,6 +106,10 @@ class MainWindow(QMainWindow):
 
         message.exec_()
 
+    def remove_selected(self,):
+        for item in self.listView_files.selectedIndexes():
+            self.listView_files_model.remove_element(item.row(), item.row())
+
 
 class FileListModel(QAbstractListModel):
     def __init__(self, **kwargs):
@@ -130,4 +135,9 @@ class FileListModel(QAbstractListModel):
     def clear_list(self,):
         self.beginRemoveRows(QModelIndex(), 0, len(self.files)-1)
         del self.files[:] # for python2 compatibility
+        self.endRemoveRows()
+
+    def remove_element(self, first, last):
+        self.beginRemoveRows(QModelIndex(), first, last)
+        del self.files[first:last+1]
         self.endRemoveRows()
