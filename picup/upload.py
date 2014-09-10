@@ -19,10 +19,10 @@
 
 from picuplib import Upload as PicflashUpload
 try:
-    from PyQt5.QtCore import QThread, pyqtSignal, Qt, QObject
+    from PyQt5.QtCore import QThread, pyqtSignal, Qt, QObject, pyqtSlot
     from PyQt5.QtWidgets import QApplication
 except ImportError:
-    from PyQt4.QtCore import QThread, pyqtSignal, Qt, QObject
+    from PyQt4.QtCore import QThread, pyqtSignal, Qt, QObject, pyqtSlot
     from PyQt4.QtGui import QApplication
 
 import logging
@@ -30,7 +30,6 @@ import logging
 
 class Upload(QObject):
 
-    upload_pictures = pyqtSignal(list)
     picture_uploaded = pyqtSignal(tuple)
     upload_finished = pyqtSignal()
     upload_error = pyqtSignal(type, tuple)
@@ -40,8 +39,8 @@ class Upload(QObject):
         QObject.__init__(self, parent=None,)
         self.upload = PicflashUpload(apikey=apikey)
 
-        self.upload_pictures.connect(self.upload_multiple)
 
+    @pyqtSlot(list)
     def upload_multiple(self, files):
         instance = QApplication.instance()
 
@@ -53,7 +52,7 @@ class Upload(QObject):
                 logging.info('Uploaded %s', file_)
             except Exception as e: # yes in know its bad, but catching every possbile exception is necessary here
                 self.upload_error.emit(type(e), e.args)
-                return False
+                raise
 
             instance.processEvents()
 

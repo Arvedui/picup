@@ -20,11 +20,11 @@
 from os import path
 try:
     from PyQt5.QtWidgets import QDialog, QVBoxLayout, QWidget
-    from PyQt5.QtCore import Qt
+    from PyQt5.QtCore import Qt, pyqtSlot
     from PyQt5.QtGui import QPixmap
 except ImportError:
     from PyQt4.QtGui import QDialog, QVBoxLayout, QWidget, QPixmap
-    from PyQt4.QtCore import Qt
+    from PyQt4.QtCore import Qt, pyqtSlot
 
 from picup.functions import load_ui, load_ui_factory
 
@@ -45,7 +45,6 @@ class ShowLinks(QDialog):
         self.central_widget.setLayout(self.scroll_area_layout)
         self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
-        self.upload_thread.picture_uploaded.connect(self.update_progress)
         self.upload_thread.picture_uploaded.connect(self.add_entry)
         self.upload_thread.upload_finished.connect(self.upload_finished)
 
@@ -53,13 +52,17 @@ class ShowLinks(QDialog):
         value = self.progressBar_upload.value()
         self.progressBar_upload.setValue(value+1)
 
+    @pyqtSlot()
     def upload_finished(self):
         self.progressBar_upload.hide()
 
-        self.upload_thread.picture_uploaded.disconnect(self.update_progress)
+        self.upload_thread.picture_uploaded.disconnect(self.add_entry)
         self.upload_thread.upload_finished.disconnect(self.upload_finished)
 
+    @pyqtSlot(tuple)
     def add_entry(self, data):
+        self.update_progress()
+
         self.entrys.append(data)
         widget = LinkWidget(data, parent=self.central_widget)
 

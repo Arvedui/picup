@@ -3,7 +3,7 @@ a = Analysis(['picup.py'],
              pathex=['c:\\Users\\pydep\\python\\picup'],
              hiddenimports=[],
              hookspath=None,
-             runtime_hooks=None)
+             runtime_hooks=['pyinstaller_hook/pyqt4_runtime_hook.py'])
 pyz = PYZ(a.pure)
 exe = EXE(pyz,
           a.scripts,

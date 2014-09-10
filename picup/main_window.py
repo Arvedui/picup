@@ -20,10 +20,12 @@ from __future__ import unicode_literals
 try:
     from PyQt5.QtWidgets import (QMainWindow, QFileDialog, QMessageBox,
                                  QMessageBox)
-    from PyQt5.QtCore import QAbstractListModel, Qt, QModelIndex, QThread
+    from PyQt5.QtCore import (QAbstractListModel, Qt, QModelIndex, QThread,
+                              pyqtSlot, pyqtSignal)
 except ImportError:
     from PyQt4.QtGui import QMainWindow, QFileDialog, QMessageBox, QMessageBox
-    from PyQt4.QtCore import QAbstractListModel, Qt, QModelIndex, QThread
+    from PyQt4.QtCore import (QAbstractListModel, Qt, QModelIndex, QThread,
+                              pyqtSlot, pyqtSignal)
 
 from picup.functions import load_ui
 from picup.functions import get_api_key
@@ -36,6 +38,8 @@ import logging
 
 class MainWindow(QMainWindow):
 
+    upload_pictures = pyqtSignal(list)
+
     def __init__(self, **kwargs):
         super(MainWindow, self).__init__(**kwargs)
 
@@ -45,8 +49,8 @@ class MainWindow(QMainWindow):
         self.upload_in_progress = False
         self.upload_thread = QThread()
         self.upload = Upload(apikey=apikey)
-        self.upload.moveToThread(self.upload_thread.thread())
         self.upload_thread.start()
+        self.upload.moveToThread(self.upload_thread.thread())
 
         self.listView_files_model = FileListModel()
         self.listView_files.setModel(self.listView_files_model)
@@ -61,19 +65,23 @@ class MainWindow(QMainWindow):
         self.upload.upload_finished.connect(self.upload_finished)
         self.upload.upload_error.connect(self.handle_error)
 
+        self.upload_pictures.connect(self.upload.upload_multiple)
+
         self.dialog = QFileDialog(parent=self)
         self.dialog.setFileMode(QFileDialog.ExistingFiles)
         self.dialog.setNameFilters(SUPPORTED_FILE_TYPES)
 
 
-
+    @pyqtSlot()
     def add_file(self):
 
         if self.dialog.exec_():
             files = self.dialog.selectedFiles()
             self.listView_files_model.add_files(files)
 
+    @pyqtSlot()
     def start_upload(self,):
+        print(self.upload_thread.isRunning())
         if (len(self.listView_files_model.files)
             and not self.upload_in_progress):
             self.upload_in_progress = True
@@ -82,8 +90,8 @@ class MainWindow(QMainWindow):
                                     parent=self)
             link_dialog.show()
 
-            self.upload.upload_pictures.emit(self.listView_files_model.files)
-            self.clear_list()
+            self.upload_pictures.emit(self.listView_files_model.files)
+            self.listView_files_model.clear_list()
         elif self.upload_in_progress:
             logging.debug('Upload already in progress.')
             QMessageBox.warning(self, 'Upload Läuft', 'Es läuft beraits ein Upload Prozess.')
@@ -92,12 +100,11 @@ class MainWindow(QMainWindow):
             logging.debug('There is nothing to upload.')
             QMessageBox.information(self, 'Nüx da', 'Es wurden keine bilder zum hochladen hinzugefügt')
 
-    def clear_list(self):
-        self.listView_files_model.clear_list()
-
+    @pyqtSlot()
     def upload_finished(self):
         self.upload_in_progress = False
 
+    @pyqtSlot(type, tuple)
     def handle_error(self, exception_type, args):
         message = QMessageBox(QMessageBox.Warning, 'Fehler',
                               'Fehler beim upload.', buttons=QMessageBox.Ok,
@@ -106,6 +113,7 @@ class MainWindow(QMainWindow):
 
         message.exec_()
 
+    @pyqtSlot()
     def remove_selected(self,):
         for item in self.listView_files.selectedIndexes():
             self.listView_files_model.remove_element(item.row(), item.row())
@@ -132,6 +140,7 @@ class FileListModel(QAbstractListModel):
         self.files.extend(files)
         self.endInsertRows()
 
+    @pyqtSlot()
     def clear_list(self,):
         self.beginRemoveRows(QModelIndex(), 0, len(self.files)-1)
         del self.files[:] # for python2 compatibility
