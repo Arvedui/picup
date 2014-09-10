@@ -32,6 +32,7 @@ from picup.functions import get_api_key
 from picup.upload import Upload
 from picup.globals import SUPPORTED_FILE_TYPES
 from picup.dialogs.show_links import ShowLinks
+from picup import __version__
 
 import logging
 
@@ -44,6 +45,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(**kwargs)
 
         load_ui('MainWindow.ui', self)
+        self.setWindowTitle('Picup - {}'.format(__version__))
 
         apikey = get_api_key(self)
         self.upload_in_progress = False
