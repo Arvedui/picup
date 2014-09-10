@@ -96,7 +96,7 @@ class MainWindow(QMainWindow):
             self.listView_files_model.clear_list()
         elif self.upload_in_progress:
             logging.debug('Upload already in progress.')
-            QMessageBox.warning(self, 'Upload Läuft', 'Es läuft beraits ein Upload Prozess.')
+            QMessageBox.warning(self, 'Upload Läuft', 'Es läuft bereits ein Upload Prozess.')
 
         else:
             logging.debug('There is nothing to upload.')
