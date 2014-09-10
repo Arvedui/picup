@@ -9,7 +9,7 @@ arch=('any')
 url="https://github.com/Arvedui/picup"
 license=('GPLv2')
 depends=('python' 'python-picuplib' 'python-pyqt5')
-makedepends=()
+makedepends=('git')
 source=("git+https://github.com/Arvedui/picup.git#tag=$pkgver")
 md5sums=("SKIP")
 
