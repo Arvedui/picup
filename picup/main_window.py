@@ -35,6 +35,7 @@ from picup.dialogs.show_links import ShowLinks
 from picup import __version__
 
 import logging
+logger = logging.getLogger('picup')
 
 
 class MainWindow(QMainWindow):
@@ -95,11 +96,11 @@ class MainWindow(QMainWindow):
             self.upload_pictures.emit(self.listView_files_model.files)
             self.listView_files_model.clear_list()
         elif self.upload_in_progress:
-            logging.debug('Upload already in progress.')
+            logger.debug('Upload already in progress.')
             QMessageBox.warning(self, 'Upload Läuft', 'Es läuft bereits ein Upload Prozess.')
 
         else:
-            logging.debug('There is nothing to upload.')
+            logger.debug('There is nothing to upload.')
             QMessageBox.information(self, 'Nüx da', 'Es wurden keine bilder zum hochladen hinzugefügt')
 
     @pyqtSlot()

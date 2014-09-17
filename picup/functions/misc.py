@@ -28,12 +28,12 @@ except:
 
 from pkg_resources import resource_filename
 
-
+logger = logging.getLogger('picup')
 
 def get_QSettings():
     settings = QSettings()
     settings.setIniCodec('utf-8')
-    logging.info('QSettings format set to: %s' % settings.format())
+    logger.debug('QSettings format set to: %s' % settings.format())
     return settings
 
 def get_file_path(relativ_path):

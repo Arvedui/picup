@@ -42,8 +42,15 @@ except ImportError:
 from picup.main_window import MainWindow
 
 import logging
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
+logger = logging.getLogger('picup')
+logger.setLevel(logging.DEBUG)
+
+logger.propagete = False
+handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+handler.setLevel(logging.DEBUG)
+logger.addHandler(handler)
 
 
 def main():

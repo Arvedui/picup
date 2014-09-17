@@ -31,19 +31,21 @@ from pkg_resources import resource_filename
 
 from picup.functions.misc import get_file_path
 
+logger = logging.getLogger('picup')
+
 def load_ui(file_name, baseinstance=None):
     """
     loads a ui file und return the resulting object
     """
     file_path = get_file_path(path.join('ui_files', file_name))
 
-    logging.info('load ui file %s', file_path)
+    logger.debug('load ui file %s', file_path)
 
     return loadUi(file_path, baseinstance)
 
 def load_ui_factory(file_name):
     file_path = get_file_path(path.join('ui_files', file_name))
 
-    logging.info('create factory from %s', file_name)
+    logger.debug('create factory from %s', file_name)
 
     return loadUiType(file_path)

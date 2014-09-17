@@ -26,6 +26,7 @@ except ImportError:
     from PyQt4.QtGui import QApplication
 
 import logging
+logger = logging.getLogger('picup')
 
 
 class Upload(QObject):
@@ -49,7 +50,7 @@ class Upload(QObject):
             try:
                 links = self.upload.upload(file_)[0]
                 self.picture_uploaded.emit((file_, links))
-                logging.info('Uploaded %s', file_)
+                logger.info('Uploaded %s', file_)
             except Exception as e: # yes in know its bad, but catching every possbile exception is necessary here
                 self.upload_error.emit(type(e), e.args)
                 raise
