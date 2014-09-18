@@ -28,7 +28,7 @@ except:
 
 from pkg_resources import resource_filename
 
-logger = logging.getLogger('picup')
+logger = logging.getLogger(__name__)
 
 def get_QSettings():
     settings = QSettings()

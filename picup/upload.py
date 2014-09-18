@@ -26,7 +26,7 @@ except ImportError:
     from PyQt4.QtGui import QApplication
 
 import logging
-logger = logging.getLogger('picup')
+logger = logging.getLogger(__name__)
 
 
 class Upload(QObject):
@@ -40,13 +40,11 @@ class Upload(QObject):
         QObject.__init__(self, parent=None,)
         self.upload = PicflashUpload(apikey=apikey)
 
-
     @pyqtSlot(list)
     def upload_multiple(self, files):
-        instance = QApplication.instance()
-
+        logger.info('starting upload process')
+        logger.debug('recived file paths: %s', files)
         for file_ in files:
-            instance.processEvents()
             try:
                 links = self.upload.upload(file_)[0]
                 self.picture_uploaded.emit((file_, links))
@@ -55,7 +53,5 @@ class Upload(QObject):
                 self.upload_error.emit(type(e), e.args)
                 raise
 
-            instance.processEvents()
-
         self.upload_finished.emit()
-
+        logging.info('upload finished')

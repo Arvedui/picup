@@ -30,6 +30,9 @@ from picup.functions import load_ui, load_ui_factory
 
 LINK_WIDGET_UI_CLASS, LINK_WIDGET_BASE_CLASS = load_ui_factory('LinkWidget.ui')
 
+import logging
+logger = logging.getLogger(__name__)
+
 class ShowLinks(QDialog):
 
     def __init__(self, upload_thread, amount_links, **kwargs):
@@ -54,10 +57,13 @@ class ShowLinks(QDialog):
 
     @pyqtSlot()
     def upload_finished(self):
+        logger.debug('recieved upload finished signal. beginn cleanup')
+
         self.progressBar_upload.hide()
 
         self.upload_thread.picture_uploaded.disconnect(self.add_entry)
         self.upload_thread.upload_finished.disconnect(self.upload_finished)
+        logger.debug('finished cleanup')
 
     @pyqtSlot(tuple)
     def add_entry(self, data):

@@ -17,6 +17,7 @@
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
 from __future__ import unicode_literals
+
 try:
     from PyQt5.QtWidgets import (QMainWindow, QFileDialog, QMessageBox,
                                  QMessageBox)
@@ -35,7 +36,7 @@ from picup.dialogs.show_links import ShowLinks
 from picup import __version__
 
 import logging
-logger = logging.getLogger('picup')
+logger = logging.getLogger(__name__)
 
 
 class MainWindow(QMainWindow):
@@ -53,7 +54,8 @@ class MainWindow(QMainWindow):
         self.upload_thread = QThread()
         self.upload = Upload(apikey=apikey)
         self.upload_thread.start()
-        self.upload.moveToThread(self.upload_thread.thread())
+        self.upload.moveToThread(self.upload_thread)
+
 
         self.listView_files_model = FileListModel()
         self.listView_files.setModel(self.listView_files_model)
@@ -62,7 +64,7 @@ class MainWindow(QMainWindow):
         self.pushButton_add_picture.clicked.connect(self.add_file)
         self.pushButton_upload.clicked.connect(self.start_upload)
         self.pushButton_clear_list.clicked.connect(
-                                        self.listView_files_model.clear_list)
+            self.listView_files_model.clear_list)
         self.pushButton_remove_selected.clicked.connect(self.remove_selected)
 
         self.upload.upload_finished.connect(self.upload_finished)
@@ -74,6 +76,14 @@ class MainWindow(QMainWindow):
         self.dialog.setFileMode(QFileDialog.ExistingFiles)
         self.dialog.setNameFilters(SUPPORTED_FILE_TYPES)
 
+    def __del__(self):
+        logger.debug('begin cleanup threads')
+        try:
+            self.upload_thread.quit()
+        except:
+            logger.exception('meep')
+        logger.debug('thread cleanup finished')
+
 
     @pyqtSlot()
     def add_file(self):
@@ -84,27 +94,29 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def start_upload(self,):
-        print(self.upload_thread.isRunning())
         if (len(self.listView_files_model.files)
-            and not self.upload_in_progress):
+                and not self.upload_in_progress):
             self.upload_in_progress = True
-            link_dialog = ShowLinks(self.upload,
-                                    len(self.listView_files_model.files),
-                                    parent=self)
+            files = self.listView_files_model.files[:]
+
+            link_dialog = ShowLinks(self.upload, len(files), parent=self)
             link_dialog.show()
 
-            self.upload_pictures.emit(self.listView_files_model.files)
+            logger.debug('emitting upload signal with arguments: %s', files)
+            self.upload_pictures.emit(files)
+
+            logger.debug('cleanup main window')
             self.listView_files_model.clear_list()
         elif self.upload_in_progress:
             logger.debug('Upload already in progress.')
             QMessageBox.warning(self, 'Upload Läuft', 'Es läuft bereits ein Upload Prozess.')
 
         else:
-            logger.debug('There is nothing to upload.')
+            logger.info('There is nothing to upload.')
             QMessageBox.information(self, 'Nüx da', 'Es wurden keine bilder zum hochladen hinzugefügt')
 
     @pyqtSlot()
-    def upload_finished(self):
+    def upload_finished(self, ):
         self.upload_in_progress = False
 
     @pyqtSlot(type, tuple)

@@ -69,7 +69,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Zum hochladen von Bildern in deinen Account wird ein Picflash API-Key benötigt. Diesen kannst du unter &lt;a href=&quot;https://www.picflash.org/control.php&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://www.picflash.org/control.php&lt;/span&gt;&lt;/a&gt; einsehen. Alternativ können die Bilder auch so hochgeladen werden, allerdings werden diese dann nicht deinem Account zugeordnet und können nur über den Löschlink wieder gelöscht werden.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Zum Hochladen von Bildern in deinen Account wird ein Picflash API-Key benötigt diesen kannst du unter &lt;a href=&quot;https://www.picflash.org/control.php&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://www.picflash.org/control.php&lt;/span&gt;&lt;/a&gt; herausfinden. Alternativ können die Bilder auch einfach so hoch geladen werden in diesem Fall werden diese aber nicht in deinem Account ersichtlich sein. Und können nur über den Löschlink gelöscht werden.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="textFormat">
          <enum>Qt::AutoText</enum>

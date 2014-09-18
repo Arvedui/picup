@@ -21,9 +21,12 @@ __version__ = '0.1.3'
 
 import sys
 
+PYQT_VERSION = None
+
 try:
     from PyQt5.QtWidgets import QApplication
     from PyQt5.QtCore import QSettings
+    PYQT_VERSION = 5
 except ImportError:
     # setting PyQt apiversion to 2, where possible
     import sip
@@ -39,19 +42,22 @@ except ImportError:
     from PyQt4.QtGui import QApplication
     from PyQt4.QtCore import QSettings
 
+    PYQT_VERSION = 4
+
 from picup.main_window import MainWindow
 
 import logging
-logger = logging.getLogger('picup')
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.ERROR)
 
 logger.propagete = False
 handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 handler.setFormatter(formatter)
 handler.setLevel(logging.DEBUG)
 logger.addHandler(handler)
 
+logger.info('using PyQt version %i', PYQT_VERSION)
 
 def main():
     app = QApplication(sys.argv)

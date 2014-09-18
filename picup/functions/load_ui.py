@@ -31,7 +31,7 @@ from pkg_resources import resource_filename
 
 from picup.functions.misc import get_file_path
 
-logger = logging.getLogger('picup')
+logger = logging.getLogger(__name__)
 
 def load_ui(file_name, baseinstance=None):
     """

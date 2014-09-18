@@ -26,7 +26,7 @@ from picup.globals import DEFAULT_API_KEY
 from picup.dialogs import KeyRequest
 
 import logging
-logger = logging.getLogger('picup')
+logger = logging.getLogger(__name__)
 
 def get_api_key(parent):
     settings = get_QSettings()
