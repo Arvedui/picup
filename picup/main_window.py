@@ -90,7 +90,7 @@ class MainWindow(QMainWindow):
 
         if self.dialog.exec_():
             files = self.dialog.selectedFiles()
-            self.listView_files_model.add_files(files)
+            self.listView_files_model.add_files([(file_, 'file') for file_ in files])
 
     @pyqtSlot()
     def start_upload(self,):
@@ -145,7 +145,7 @@ class FileListModel(QAbstractListModel):
 
     def data(self, index, role):
         if role == Qt.DisplayRole:
-            return self.files[index.row()]
+            return self.files[index.row()][0]
 
 
     def add_files(self, files):

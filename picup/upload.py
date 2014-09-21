@@ -44,14 +44,14 @@ class Upload(QObject):
     def upload_multiple(self, files):
         logger.info('starting upload process')
         logger.debug('recived file paths: %s', files)
-        for file_ in files:
+        for file_, type_ in files:
             try:
                 links = self.upload.upload(file_)[0]
                 self.picture_uploaded.emit((file_, links))
                 logger.info('Uploaded %s', file_)
-            except Exception as e: # yes in know its bad, but catching every possbile exception is necessary here
+            except Exception as e: # yes in know its bad, but catching every possbile exception is necessary here, because missing one could result in a stucking ui
                 self.upload_error.emit(type(e), e.args)
-                raise
+                logger.exception('some exception happend')
 
         self.upload_finished.emit()
         logging.info('upload finished')
