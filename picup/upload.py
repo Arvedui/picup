@@ -46,8 +46,12 @@ class Upload(QObject):
         logger.debug('recived file paths: %s', files)
         for file_, type_ in files:
             try:
-                links = self.upload.upload(file_)[0]
-                self.picture_uploaded.emit((file_, links))
+                if type_ == 'file':
+                    links = self.upload.upload(file_)[0]
+                if type_ == 'url':
+                    links = self.upload.remote_upload(file_)[0]
+
+                self.picture_uploaded.emit((file_, type_, links))
                 logger.info('Uploaded %s', file_)
             except Exception as e: # yes in know its bad, but catching every possbile exception is necessary here, because missing one could result in a stucking ui
                 self.upload_error.emit(type(e), e.args)

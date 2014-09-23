@@ -19,34 +19,20 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="6" column="1">
-     <widget class="QPushButton" name="pushButton_close">
-      <property name="text">
-       <string>Beenden</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" rowspan="7">
-     <widget class="QListView" name="listView_files">
-      <property name="selectionMode">
-       <enum>QAbstractItemView::ExtendedSelection</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="1">
      <widget class="QPushButton" name="pushButton_clear_list">
       <property name="text">
        <string>Liste leeren</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="5" column="1">
      <widget class="QPushButton" name="pushButton_remove_selected">
       <property name="text">
        <string>Auswahl entfernen</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
+    <item row="4" column="1">
      <widget class="QPushButton" name="pushButton_upload">
       <property name="text">
        <string>Hochladen</string>
@@ -73,6 +59,27 @@
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QPushButton" name="pushButton_close">
+      <property name="text">
+       <string>Beenden</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" rowspan="8">
+     <widget class="QListView" name="listView_files">
+      <property name="selectionMode">
+       <enum>QAbstractItemView::ExtendedSelection</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QPushButton" name="pushButton_add_links">
+      <property name="text">
+       <string>Links Hinzufügen</string>
       </property>
      </widget>
     </item>

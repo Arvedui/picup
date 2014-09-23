@@ -20,13 +20,13 @@ from __future__ import unicode_literals
 
 try:
     from PyQt5.QtWidgets import (QMainWindow, QFileDialog, QMessageBox,
-                                 QMessageBox)
+                                 QMessageBox, QInputDialog)
     from PyQt5.QtCore import (QAbstractListModel, Qt, QModelIndex, QThread,
                               pyqtSlot, pyqtSignal)
 except ImportError:
     from PyQt4.QtGui import QMainWindow, QFileDialog, QMessageBox, QMessageBox
     from PyQt4.QtCore import (QAbstractListModel, Qt, QModelIndex, QThread,
-                              pyqtSlot, pyqtSignal)
+                              pyqtSlot, pyqtSignal, QInputDialog)
 
 from picup.functions import load_ui
 from picup.functions import get_api_key
@@ -37,6 +37,11 @@ from picup import __version__
 
 import logging
 logger = logging.getLogger(__name__)
+
+try:
+    from urllib.parse import urlparse, urlunparse
+except:
+    from urllib import urlparse, urlunparse
 
 
 class MainWindow(QMainWindow):
@@ -62,6 +67,7 @@ class MainWindow(QMainWindow):
 
         self.pushButton_close.clicked.connect(self.close)
         self.pushButton_add_picture.clicked.connect(self.add_file)
+        self.pushButton_add_links.clicked.connect(self.add_url)
         self.pushButton_upload.clicked.connect(self.start_upload)
         self.pushButton_clear_list.clicked.connect(
             self.listView_files_model.clear_list)
@@ -81,16 +87,43 @@ class MainWindow(QMainWindow):
         try:
             self.upload_thread.quit()
         except:
-            logger.exception('meep')
+            logger.exception('Exception while cleanup')
         logger.debug('thread cleanup finished')
 
 
     @pyqtSlot()
     def add_file(self):
-
         if self.dialog.exec_():
             files = self.dialog.selectedFiles()
             self.listView_files_model.add_files([(file_, 'file') for file_ in files])
+
+    @pyqtSlot()
+    def add_url(self,):
+        urls = QInputDialog.getMultiLineText(self, 'Links','Es können beliebig viele links eingegeben werden, einer pro Zeile. Erlaubt sind FTP, HTTP und HTTPS. Ist kein Protokoll angegeben wird HTTP angenommen.')
+
+        new_entrys = []
+        not_added = []
+
+        if urls[1] and urls[0] != '':
+            for url in urls[0].split('\n'):
+                parsed_url = urlparse(url, scheme='http')
+                scheme = parsed_url.scheme.lower()
+                if scheme in ['http', 'https', 'ftp']:
+                    new_entrys.append((urlunparse(parsed_url), 'url'))
+
+                else:
+                    not_added.append(url)
+
+            if not_added:
+                message = QMessageBox(QMessageBox.Warning, 'Fehler',
+                                      'Ein oder mehrere link(s) konnten nicht hinzugefügt werden.',
+                                      buttons=QMessageBox.Ok,
+                                      parent=self)
+                message,setDetailedText('\n'.join(not_added))
+
+
+
+            self.listView_files_model.add_files(new_entrys)
 
     @pyqtSlot()
     def start_upload(self,):

@@ -18,6 +18,7 @@
 ######################### END LICENSE BLOCK #########################
 
 from os import path
+from requests import get
 try:
     from PyQt5.QtWidgets import QDialog, QVBoxLayout, QWidget
     from PyQt5.QtCore import Qt, pyqtSlot
@@ -79,12 +80,18 @@ class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
     def __init__(self, data, **kwargs):
         super(LinkWidget, self).__init__(**kwargs)
         self.setupUi(self)
-        filename, links = data
+        filename, type_, links = data
 
         self.groupBox.setTitle(path.split(filename)[1])
 
         pixmap = QPixmap()
-        pixmap.load(filename)
+
+        if type_ == 'url':
+            thumbnail = get(links['thumbnail'])
+            pixmap.loadFromData(thumbnail.content)
+        else:
+            pixmap.load(filename)
+
         self.pixmap = pixmap.scaled(120, 120, Qt.KeepAspectRatio)
         self.label_picture.setPixmap(self.pixmap)
 

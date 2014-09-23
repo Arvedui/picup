@@ -13,7 +13,7 @@ setup(
     author_email='Arvedui@posteo.de',
     license='GPLv2',
     packages=find_packages(),
-    install_requires=['picuplib'],
+    install_requires=['picuplib', 'requests'],
     package_data={
             'picup':['ui_files/*.ui',]
         },
