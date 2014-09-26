@@ -20,13 +20,13 @@ from __future__ import unicode_literals
 
 try:
     from PyQt5.QtWidgets import (QMainWindow, QFileDialog, QMessageBox,
-                                 QMessageBox, QInputDialog)
+                                 QMessageBox)
     from PyQt5.QtCore import (QAbstractListModel, Qt, QModelIndex, QThread,
                               pyqtSlot, pyqtSignal)
 except ImportError:
     from PyQt4.QtGui import QMainWindow, QFileDialog, QMessageBox, QMessageBox
     from PyQt4.QtCore import (QAbstractListModel, Qt, QModelIndex, QThread,
-                              pyqtSlot, pyqtSignal, QInputDialog)
+                              pyqtSlot, pyqtSignal)
 
 from picup.functions import load_ui
 from picup.functions import get_api_key
@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 try:
     from urllib.parse import urlparse, urlunparse
 except:
-    from urllib import urlparse, urlunparse
+    from urlparse import urlparse, urlunparse
 
 
 class MainWindow(QMainWindow):
