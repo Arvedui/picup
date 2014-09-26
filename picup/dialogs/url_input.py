@@ -17,6 +17,39 @@
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
 
-from picup.dialogs.key_request import KeyRequest
-from picup.dialogs.show_links import ShowLinks
-from picup.dialogs.url_input import UrlInput
+
+try:
+    from PyQt5.QtWidgets import QDialog
+    from PyQt5.QtCore import pyqtSlot
+
+except ImportError:
+    from PyQt4.QtGui import QDialog
+    from PyQt4.QtCore import pyqtSlot
+
+
+from picup.functions import load_ui
+
+
+import logging
+logger = logging.getLogger(__name__)
+
+
+class UrlInput(QDialog):
+
+    def __init__(self, **kwargs):
+        super(UrlInput, self).__init__(**kwargs)
+        load_ui('link_input.ui', self)
+
+        self.buttonBox.rejected.connect(self.reject)
+        self.buttonBox.accepted.connect(self.accept)
+
+    @pyqtSlot()
+    def reject(self,):
+        self.done(False)
+
+    @pyqtSlot()
+    def accept(self,):
+        self.done(True)
+
+    def text(self,):
+        return self.plainTextEdit.toPlainText()

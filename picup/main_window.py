@@ -32,7 +32,7 @@ from picup.functions import load_ui
 from picup.functions import get_api_key
 from picup.upload import Upload
 from picup.globals import SUPPORTED_FILE_TYPES
-from picup.dialogs.show_links import ShowLinks
+from picup.dialogs import ShowLinks, UrlInput
 from picup import __version__
 
 import logging
@@ -99,13 +99,15 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def add_url(self,):
-        urls = QInputDialog.getMultiLineText(self, 'Links','Es können beliebig viele links eingegeben werden, einer pro Zeile. Erlaubt sind FTP, HTTP und HTTPS. Ist kein Protokoll angegeben wird HTTP angenommen.')
+        url_input = UrlInput()
+        code = url_input.exec_()
+        urls = url_input.text()
 
         new_entrys = []
         not_added = []
 
-        if urls[1] and urls[0] != '':
-            for url in urls[0].split('\n'):
+        if code and urls != '':
+            for url in urls.split('\n'):
                 parsed_url = urlparse(url, scheme='http')
                 scheme = parsed_url.scheme.lower()
                 if scheme in ['http', 'https', 'ftp']:
@@ -119,7 +121,7 @@ class MainWindow(QMainWindow):
                                       'Ein oder mehrere link(s) konnten nicht hinzugefügt werden.',
                                       buttons=QMessageBox.Ok,
                                       parent=self)
-                message,setDetailedText('\n'.join(not_added))
+                message.setDetailedText('\n'.join(not_added))
 
 
 
