@@ -64,7 +64,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Global</string>
+          <string/>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
@@ -81,20 +81,20 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox"/>
+           <widget class="QComboBox" name="comboBox_resize_options"/>
           </item>
           <item>
            <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Rotieren</string>
+             <string>Rotieren(in °)</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="comboBox_2"/>
+           <widget class="QComboBox" name="comboBox_rotate_options"/>
           </item>
           <item>
-           <widget class="QCheckBox" name="checkBox">
+           <widget class="QCheckBox" name="checkBox_delete_exif">
             <property name="text">
              <string>Exif Daten Löschen</string>
             </property>

@@ -82,21 +82,24 @@ class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
         self.setupUi(self)
         filename, type_, links = data
 
+        pixmap = QPixmap()
+
+        if type_ == 'url':
+            logger.debug('load thumbnail from picflash')
+            thumbnail = get(links['thumbnail'])
+            pixmap.loadFromData(thumbnail.content)
+        else:
+            logger.debug('generate thumbnail from file %s', filename)
+            pixmap.load(filename)
+
+        self.pixmap = pixmap.scaled(150, 150, Qt.KeepAspectRatio)
+        self.label_picture.setPixmap(self.pixmap)
+
         filename = path.split(filename)[1]
         if len(filename) > 50:
             filename = filename[:50] + ' … ' + filename[-4:]
         self.groupBox.setTitle(filename)
 
-        pixmap = QPixmap()
-
-        if type_ == 'url':
-            thumbnail = get(links['thumbnail'])
-            pixmap.loadFromData(thumbnail.content)
-        else:
-            pixmap.load(filename)
-
-        self.pixmap = pixmap.scaled(150, 150, Qt.KeepAspectRatio)
-        self.label_picture.setPixmap(self.pixmap)
 
         self.lineEdit_sharelink.setText(links['sharelink'])
         self.lineEdit_hotlink.setText(links['hotlink'])

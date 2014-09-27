@@ -29,6 +29,8 @@ except ImportError:
     from PyQt4.QtCore import (QAbstractListModel, Qt, QModelIndex, QThread,
                               pyqtSlot, pyqtSignal)
 
+from picuplib.globals import ALLOWED_RESIZE, ALLOWED_ROTATION
+
 from picup.functions import load_ui
 from picup.functions import get_api_key
 from picup.upload import Upload
@@ -82,6 +84,21 @@ class MainWindow(QMainWindow):
         self.dialog = QFileDialog(parent=self)
         self.dialog.setFileMode(QFileDialog.ExistingFiles)
         self.dialog.setNameFilters(SUPPORTED_FILE_TYPES)
+
+        self.comboBox_resize_options.activated['QString'].connect(
+                    self.upload.change_default_resize)
+        self.comboBox_rotate_options.activated['QString'].connect(
+                    self.upload.change_default_rotation)
+        self.checkBox_delete_exif.toggled.connect(
+                    self.upload.change_default_exif)
+
+        self.comboBox_resize_options.addItem('')
+        for item in ALLOWED_RESIZE:
+            if item == 'og':
+                continue
+            self.comboBox_resize_options.addItem(item)
+
+        self.comboBox_rotate_options.addItems(ALLOWED_ROTATION)
 
     def __del__(self):
         logger.debug('begin cleanup threads')

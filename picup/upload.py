@@ -44,12 +44,13 @@ class Upload(QObject):
     def upload_multiple(self, files):
         logger.info('starting upload process')
         logger.debug('recived file paths: %s', files)
+
         for file_, type_ in files:
             try:
                 if type_ == 'file':
-                    links = self.upload.upload(file_)[0]
+                    links = self.upload.upload(file_)
                 if type_ == 'url':
-                    links = self.upload.remote_upload(file_)[0]
+                    links = self.upload.remote_upload(file_)
 
                 self.picture_uploaded.emit((file_, type_, links))
                 logger.info('Uploaded %s', file_)
@@ -59,3 +60,22 @@ class Upload(QObject):
 
         self.upload_finished.emit()
         logging.info('upload finished')
+
+    @pyqtSlot(str)
+    def change_default_rotation(self, rotation):
+        logger.debug('Default rotation changed to %s', rotation)
+        self.upload.rotation = rotation
+
+    @pyqtSlot(str)
+    def change_default_resize(self, resize):
+        if resize == '':
+            resize = 'og'
+
+        logger.debug('Default resize changed to %s', resize)
+
+        self.upload.resize = resize
+
+    @pyqtSlot(str)
+    def change_default_exif(self, delete_exif):
+        logger.debug('Default exif deletion changed to %s', delete_exif)
+        self.upload.noexif = delete_exif
