@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>566</width>
+    <width>538</width>
     <height>228</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -26,7 +26,7 @@
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -45,7 +45,7 @@
        <widget class="QLineEdit" name="lineEdit_deletelink">
         <property name="minimumSize">
          <size>
-          <width>159</width>
+          <width>0</width>
           <height>0</height>
          </size>
         </property>
@@ -62,7 +62,14 @@
        </widget>
       </item>
       <item row="6" column="2">
-       <widget class="QLineEdit" name="lineEdit_bb_hotlink"/>
+       <widget class="QLineEdit" name="lineEdit_bb_hotlink">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
       </item>
       <item row="5" column="2">
        <widget class="QLabel" name="label_5">
@@ -78,18 +85,11 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QLineEdit" name="lineEdit_preview">
-        <property name="readOnly">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="1">
        <widget class="QLineEdit" name="lineEdit_sharelink">
         <property name="minimumSize">
          <size>
-          <width>159</width>
+          <width>0</width>
           <height>0</height>
          </size>
         </property>
@@ -102,7 +102,7 @@
        <widget class="QLineEdit" name="lineEdit_hotlink">
         <property name="minimumSize">
          <size>
-          <width>159</width>
+          <width>0</width>
           <height>0</height>
          </size>
         </property>
@@ -125,29 +125,6 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="1">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Löschlink</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="QLineEdit" name="lineEdit_bb_preview"/>
-      </item>
-      <item row="7" column="1">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item row="2" column="0" rowspan="6">
        <widget class="QLabel" name="label_picture">
         <property name="sizePolicy">
@@ -167,6 +144,36 @@
         </property>
         <property name="scaledContents">
          <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Löschlink</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QLineEdit" name="lineEdit_bb_preview">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLineEdit" name="lineEdit_preview">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
