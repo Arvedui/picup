@@ -113,7 +113,7 @@
        <item row="1" column="1">
         <widget class="QPushButton" name="pushButton_save_to_file_">
          <property name="text">
-          <string>In datei speichern</string>
+          <string>In Datei speichern</string>
          </property>
         </widget>
        </item>
@@ -125,7 +125,14 @@
         </widget>
        </item>
        <item row="0" column="0" colspan="3">
-        <widget class="QListView" name="listView_links"/>
+        <widget class="QListView" name="listView_links">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

@@ -21,14 +21,14 @@ from os import path
 from requests import get
 try:
     from PyQt5.QtWidgets import QDialog, QVBoxLayout, QWidget
-    from PyQt5.QtCore import Qt, pyqtSlot
+    from PyQt5.QtCore import Qt, pyqtSlot, QAbstractListModel, QModelIndex
     from PyQt5.QtGui import QPixmap
 except ImportError:
     from PyQt4.QtGui import QDialog, QVBoxLayout, QWidget, QPixmap
-    from PyQt4.QtCore import Qt, pyqtSlot
+    from PyQt4.QtCore import Qt, pyqtSlot, QAbstractListModel, QModelIndex
 
 from picup.functions import load_ui, load_ui_factory
-from picup.globals import BB_TEMPLTATE
+from picup.globals import BB_TEMPLTATE, LINKTYPES, LINKTYPE_ORDER
 
 LINK_WIDGET_UI_CLASS, LINK_WIDGET_BASE_CLASS = load_ui_factory('LinkWidget.ui')
 
@@ -41,7 +41,9 @@ class ShowLinks(QDialog):
         super(ShowLinks, self).__init__(**kwargs)
         load_ui('LinkDialog.ui', self)
 
-        self.entrys = []
+        self.linkmodel = LinkListModel()
+        self.listView_links.setModel(self.linkmodel)
+
         self.upload_thread = upload_thread
         self.central_widget = QWidget(self)
         self.scrollArea.setWidget(self.central_widget)
@@ -52,6 +54,13 @@ class ShowLinks(QDialog):
 
         self.upload_thread.picture_uploaded.connect(self.add_entry)
         self.upload_thread.upload_finished.connect(self.upload_finished)
+        self.comboBox_link_output.activated['QString'].connect(
+                        self.linkmodel.set_linktype)
+
+
+        self.comboBox_link_output.addItems(LINKTYPE_ORDER)
+
+
 
     def update_progress(self):
         value = self.progressBar_upload.value()
@@ -77,10 +86,11 @@ class ShowLinks(QDialog):
         links['bb_thumbnail'] = BB_TEMPLTATE.format(links['sharelink'],
                                                     links['thumbnail'])
 
-        self.entrys.append(data)
+        self.linkmodel.add_link(data)
         widget = LinkWidget(data, parent=self.central_widget)
 
         self.scroll_area_layout.addWidget(widget)
+
 
 class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
 
@@ -121,3 +131,31 @@ class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
         self.lineEdit_preview.setCursorPosition(0)
         self.lineEdit_bb_hotlink.setCursorPosition(0)
         self.lineEdit_bb_preview.setCursorPosition(0)
+
+
+class LinkListModel(QAbstractListModel):
+    def __init__(self, **kwargs):
+        super(LinkListModel, self).__init__(**kwargs)
+
+        self.links = []
+        self.linktype = "sharelink"
+
+    def rowCount(self, parent):
+        return len(self.links)
+
+    def data(self, index, role):
+        if role == Qt.DisplayRole:
+            return self.links[index.row()][2][self.linktype]
+
+    def add_link(self, data):
+        prev_len = len(self.links)
+
+        self.beginInsertRows(QModelIndex(), prev_len, prev_len + 1)
+        self.links.append(data)
+        self.endInsertRows()
+
+    @pyqtSlot(str)
+    def set_linktype(self, linktype):
+        self.beginResetModel()
+        self.linktype = LINKTYPES[linktype]
+        self.endResetModel()
