@@ -20,11 +20,12 @@
 from os import path
 from requests import get
 try:
-    from PyQt5.QtWidgets import QDialog, QVBoxLayout, QWidget
+    from PyQt5.QtWidgets import QDialog, QVBoxLayout, QWidget, QApplication
     from PyQt5.QtCore import Qt, pyqtSlot, QAbstractListModel, QModelIndex
-    from PyQt5.QtGui import QPixmap
+    from PyQt5.QtGui import QPixmap, QClipboard
 except ImportError:
-    from PyQt4.QtGui import QDialog, QVBoxLayout, QWidget, QPixmap
+    from PyQt4.QtGui import (QDialog, QVBoxLayout, QWidget, QPixmap, QClipboard,
+                             QApplication)
     from PyQt4.QtCore import Qt, pyqtSlot, QAbstractListModel, QModelIndex
 
 from picup.functions import load_ui, load_ui_factory
@@ -43,6 +44,7 @@ class ShowLinks(QDialog):
 
         self.linkmodel = LinkListModel()
         self.listView_links.setModel(self.linkmodel)
+        self.clipboard = QApplication.clipboard()
 
         self.upload_thread = upload_thread
         self.central_widget = QWidget(self)
@@ -56,6 +58,7 @@ class ShowLinks(QDialog):
         self.upload_thread.upload_finished.connect(self.upload_finished)
         self.comboBox_link_output.activated['QString'].connect(
                         self.linkmodel.set_linktype)
+        self.pushButton_to_clipboard.clicked.connect(self.copy_to_clipboard)
 
 
         self.comboBox_link_output.addItems(LINKTYPE_ORDER)
@@ -90,6 +93,25 @@ class ShowLinks(QDialog):
         widget = LinkWidget(data, parent=self.central_widget)
 
         self.scroll_area_layout.addWidget(widget)
+
+    def gen_string(self,):
+        selection_text = []
+        selection = self.listView_links.selectedIndexes()
+        if selection:
+            for index in self.listView_links.selectedIndexes():
+                data = self.linkmodel.data(index)
+                selection_text.append(data)
+
+        else:
+            selection_text = self.linkmodel.get_all_rows()
+
+        return "\n".join(selection_text)
+
+    @pyqtSlot()
+    def copy_to_clipboard(self,):
+        string = self.gen_string()
+
+        self.clipboard.setText(string)
 
 
 class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
@@ -143,9 +165,12 @@ class LinkListModel(QAbstractListModel):
     def rowCount(self, parent):
         return len(self.links)
 
-    def data(self, index, role):
-        if role == Qt.DisplayRole:
+    def data(self, index, role=None):
+        if role == Qt.DisplayRole or not role:
             return self.links[index.row()][2][self.linktype]
+
+    def get_all_rows(self,):
+        return [item[2][self.linktype] for item in self.links]
 
     def add_link(self, data):
         prev_len = len(self.links)
