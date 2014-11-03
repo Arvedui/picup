@@ -28,6 +28,7 @@ except ImportError:
     from PyQt4.QtCore import Qt, pyqtSlot
 
 from picup.functions import load_ui, load_ui_factory
+from picup.globals import BB_TEMPLTATE
 
 LINK_WIDGET_UI_CLASS, LINK_WIDGET_BASE_CLASS = load_ui_factory('LinkWidget.ui')
 
@@ -70,6 +71,12 @@ class ShowLinks(QDialog):
     def add_entry(self, data):
         self.update_progress()
 
+        links = data[2]
+        links['bb_hotlink'] = BB_TEMPLTATE.format(links['sharelink'],
+                                                  links['hotlink'])
+        links['bb_thumbnail'] = BB_TEMPLTATE.format(links['sharelink'],
+                                                    links['thumbnail'])
+
         self.entrys.append(data)
         widget = LinkWidget(data, parent=self.central_widget)
 
@@ -105,8 +112,12 @@ class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
         self.lineEdit_hotlink.setText(links['hotlink'])
         self.lineEdit_deletelink.setText(links['delete_url'])
         self.lineEdit_preview.setText(links['thumbnail'])
+        self.lineEdit_bb_preview.setText(links['bb_thumbnail'])
+        self.lineEdit_bb_hotlink.setText(links['bb_hotlink'])
 
         self.lineEdit_sharelink.setCursorPosition(0)
         self.lineEdit_hotlink.setCursorPosition(0)
         self.lineEdit_deletelink.setCursorPosition(0)
         self.lineEdit_preview.setCursorPosition(0)
+        self.lineEdit_bb_hotlink.setCursorPosition(0)
+        self.lineEdit_bb_preview.setCursorPosition(0)

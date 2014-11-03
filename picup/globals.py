@@ -29,3 +29,6 @@ SUPPORTED_FILE_TYPES = (
     'Erlaubte Formate (*.png *.jpg *.jpeg *.gif *.pdf)',
     'Alle Dateien (*)'
     )
+
+
+BB_TEMPLTATE = '[url={}][img]{}[/img][/url]'

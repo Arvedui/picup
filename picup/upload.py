@@ -17,6 +17,8 @@
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
 
+from retrying import retry
+
 from picuplib import Upload as PicflashUpload
 try:
     from PyQt5.QtCore import QThread, pyqtSignal, Qt, QObject, pyqtSlot
@@ -38,19 +40,18 @@ class Upload(QObject):
 
     def __init__(self, apikey):
         QObject.__init__(self, parent=None,)
-        self.upload = PicflashUpload(apikey=apikey)
+        self.uploader = PicflashUpload(apikey=apikey)
 
     @pyqtSlot(list)
     def upload_multiple(self, files):
         logger.info('starting upload process')
         logger.debug('recived file paths: %s', files)
 
+        failed = []
+
         for file_, type_ in files:
             try:
-                if type_ == 'file':
-                    links = self.upload.upload(file_)
-                if type_ == 'url':
-                    links = self.upload.remote_upload(file_)
+                links = self.upload(file_, type_)
 
                 self.picture_uploaded.emit((file_, type_, links))
                 logger.info('Uploaded %s', file_)
@@ -61,10 +62,22 @@ class Upload(QObject):
         self.upload_finished.emit()
         logging.info('upload finished')
 
+    @retry(stop_max_attempt_number=3)
+    def upload(self, file_, type_):
+        if type_ == 'file':
+            links = self.uploader.upload(file_)
+        if type_ == 'url':
+            links = self.uploader.remote_upload(file_)
+
+        return links
+
+
+
+
     @pyqtSlot(str)
     def change_default_rotation(self, rotation):
         logger.debug('Default rotation changed to %s', rotation)
-        self.upload.rotation = rotation
+        self.uploader.rotation = rotation
 
     @pyqtSlot(str)
     def change_default_resize(self, resize):
@@ -73,9 +86,9 @@ class Upload(QObject):
 
         logger.debug('Default resize changed to %s', resize)
 
-        self.upload.resize = resize
+        self.uploader.resize = resize
 
     @pyqtSlot(str)
     def change_default_exif(self, delete_exif):
         logger.debug('Default exif deletion changed to %s', delete_exif)
-        self.upload.noexif = delete_exif
+        self.uploader.noexif = delete_exif
