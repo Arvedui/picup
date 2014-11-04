@@ -3,12 +3,12 @@
 
 pkgname=picup
 pkgver=0.3
-pkgrel=1
+pkgrel=2
 pkgdesc="Picflash upload Tool"
 arch=('any')
 url="https://github.com/Arvedui/picup"
-license=('GPLv2')
-depends=('python' 'python-picuplib' 'python-pyqt5')
+license=('GPL2')
+depends=('python' 'python-picuplib' 'python-pyqt5' 'python-retrying')
 makedepends=('git')
 source=("git+https://github.com/Arvedui/picup.git#tag=$pkgver")
 md5sums=("SKIP")
