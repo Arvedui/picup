@@ -118,8 +118,10 @@ class ShowLinks(QDialog):
     @pyqtSlot()
     def copy_to_file(self,):
         filename = QFileDialog.getSaveFileName(self, 'test')
+        if type(filename) == tuple:
+            filename = filename[0]
         if filename:
-            with open(filename[0], 'w') as file_obj:
+            with open(filename, 'w') as file_obj:
                 file_obj.write(self.gen_string())
 
 
