@@ -20,12 +20,12 @@
 from os import path
 from requests import get
 try:
-    from PyQt5.QtWidgets import QDialog, QVBoxLayout, QWidget, QApplication
+    from PyQt5.QtWidgets import QDialog, QVBoxLayout, QWidget, QApplication, QFileDialog
     from PyQt5.QtCore import Qt, pyqtSlot, QAbstractListModel, QModelIndex
     from PyQt5.QtGui import QPixmap, QClipboard
 except ImportError:
     from PyQt4.QtGui import (QDialog, QVBoxLayout, QWidget, QPixmap, QClipboard,
-                             QApplication)
+                             QApplication, QFileDialog)
     from PyQt4.QtCore import Qt, pyqtSlot, QAbstractListModel, QModelIndex
 
 from picup.functions import load_ui, load_ui_factory
@@ -59,6 +59,7 @@ class ShowLinks(QDialog):
         self.comboBox_link_output.activated['QString'].connect(
                         self.linkmodel.set_linktype)
         self.pushButton_to_clipboard.clicked.connect(self.copy_to_clipboard)
+        self.pushButton_to_file.clicked.connect(self.copy_to_file)
 
 
         self.comboBox_link_output.addItems(LINKTYPE_ORDER)
@@ -105,13 +106,21 @@ class ShowLinks(QDialog):
         else:
             selection_text = self.linkmodel.get_all_rows()
 
-        return "\n".join(selection_text)
+        return "\n".join(selection_text) + '\n'
 
     @pyqtSlot()
     def copy_to_clipboard(self,):
         string = self.gen_string()
 
         self.clipboard.setText(string)
+
+    @pyqtSlot()
+    def copy_to_file(self,):
+        filename = QFileDialog.getSaveFileName(self, 'test')
+        if filename:
+            with open(filename[0], 'w') as file_obj:
+                file_obj.write(self.gen_string())
+
 
 
 class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):

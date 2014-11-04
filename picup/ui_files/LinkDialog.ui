@@ -111,7 +111,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QPushButton" name="pushButton_save_to_file_">
+        <widget class="QPushButton" name="pushButton_to_file">
          <property name="text">
           <string>In Datei speichern</string>
          </property>
