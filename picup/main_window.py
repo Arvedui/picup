@@ -29,12 +29,12 @@ except ImportError:
     from PyQt4.QtCore import (QAbstractListModel, Qt, QModelIndex, QThread,
                               pyqtSlot, pyqtSignal)
 
-from picuplib.globals import ALLOWED_RESIZE, ALLOWED_ROTATION, DEFAULT_API_KEY
+from picuplib.globals import ALLOWED_RESIZE, ALLOWED_ROTATION
 
 from picup.functions import load_ui
 from picup.functions import get_api_key, set_api_key
 from picup.upload import Upload
-from picup.globals import SUPPORTED_FILE_TYPES, __version__
+from picup.globals import SUPPORTED_FILE_TYPES, __version__, DEFAULT_API_KEY
 from picup.dialogs import ShowLinks, UrlInput, KeyRequest
 
 import logging
@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
         load_ui('MainWindow.ui', self)
         self.setWindowTitle('Picup - {}'.format(__version__))
 
-        apikey = get_api_key(self)
+        apikey = get_api_key()
         if not apikey:
             apikey = self.request_api_key()
 
