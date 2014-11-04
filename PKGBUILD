@@ -2,7 +2,7 @@
 
 
 pkgname=picup
-pkgver=0.2
+pkgver=0.3
 pkgrel=1
 pkgdesc="Picflash upload Tool"
 arch=('any')
