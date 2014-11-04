@@ -16,39 +16,33 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
+"""
+some apikey related functions
+"""
 
-import json
-import sys
-import picup
 
 from picup.functions.misc import get_QSettings
-from picup.globals import DEFAULT_API_KEY
-from picup.dialogs import KeyRequest
 
 import logging
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
-def get_api_key(parent):
+def get_api_key():
+    """
+    reads apikey from Qt Settings, if not present return None
+    """
     settings = get_QSettings()
     if settings.contains('apikey'):
         apikey = settings.value('apikey')
     else:
-        apikey = request_api_key(parent, settings)
+        apikey = None
 
-    logger.debug('Using api key: %s' % apikey)
+    LOGGER.debug('Using api key: %s', apikey)
     return apikey
 
 
-def request_api_key(parent, settings):
-    window = KeyRequest(parent=parent)
-    if window.exec_():
-        apikey = window.lineEdit_apikey.text()
-        if apikey:
-            settings.setValue('apikey', apikey)
-            return apikey
-        return DEFAULT_API_KEY
-
-    sys.exit(0)
-
-
-
+def set_api_key(apikey):
+    """
+    writes apikey into Qt Settings
+    """
+    settings = get_QSettings()
+    settings.setValue('apikey', apikey)

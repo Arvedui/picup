@@ -16,6 +16,9 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
+"""
+Module for upload abstraction
+"""
 
 from retrying import retry
 
@@ -32,6 +35,9 @@ logger = logging.getLogger(__name__)
 
 
 class Upload(QObject):
+    """
+    handels the upload abstraction
+    """
 
     picture_uploaded = pyqtSignal(tuple)
     upload_finished = pyqtSignal()
@@ -44,6 +50,11 @@ class Upload(QObject):
 
     @pyqtSlot(list)
     def upload_multiple(self, files):
+        """
+        Handels upload of multiple files
+
+        files is a list of tuples (filename, type)
+        """
         logger.info('starting upload process')
         logger.debug('recived file paths: %s', files)
 
@@ -64,6 +75,9 @@ class Upload(QObject):
 
     @retry(stop_max_attempt_number=3)
     def upload(self, file_, type_):
+        """
+        hands over the upload to picuplib will retry three times
+        """
         if type_ == 'file':
             links = self.uploader.upload(file_)
         if type_ == 'url':
@@ -76,11 +90,17 @@ class Upload(QObject):
 
     @pyqtSlot(str)
     def change_default_rotation(self, rotation):
+        """
+        changes the default rotation in the underlying Upload class
+        """
         logger.debug('Default rotation changed to %s', rotation)
         self.uploader.rotation = rotation
 
     @pyqtSlot(str)
     def change_default_resize(self, resize):
+        """
+        changes the default resize parameter in the underlying Upload class
+        """
         if resize == '':
             resize = 'og'
 
@@ -90,5 +110,8 @@ class Upload(QObject):
 
     @pyqtSlot(str)
     def change_default_exif(self, delete_exif):
+        """
+        chages the default exif parameter in the underlying Upload class
+        """
         logger.debug('Default exif deletion changed to %s', delete_exif)
         self.uploader.noexif = delete_exif

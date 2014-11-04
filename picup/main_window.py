@@ -29,14 +29,13 @@ except ImportError:
     from PyQt4.QtCore import (QAbstractListModel, Qt, QModelIndex, QThread,
                               pyqtSlot, pyqtSignal)
 
-from picuplib.globals import ALLOWED_RESIZE, ALLOWED_ROTATION
+from picuplib.globals import ALLOWED_RESIZE, ALLOWED_ROTATION, DEFAULT_API_KEY
 
 from picup.functions import load_ui
-from picup.functions import get_api_key
+from picup.functions import get_api_key, set_api_key
 from picup.upload import Upload
-from picup.globals import SUPPORTED_FILE_TYPES
-from picup.dialogs import ShowLinks, UrlInput
-from picup import __version__
+from picup.globals import SUPPORTED_FILE_TYPES, __version__
+from picup.dialogs import ShowLinks, UrlInput, KeyRequest
 
 import logging
 logger = logging.getLogger(__name__)
@@ -58,6 +57,9 @@ class MainWindow(QMainWindow):
         self.setWindowTitle('Picup - {}'.format(__version__))
 
         apikey = get_api_key(self)
+        if not apikey:
+            apikey = self.request_api_key()
+
         self.upload_in_progress = False
         self.upload_thread = QThread()
         self.upload = Upload(apikey=apikey)
@@ -107,6 +109,17 @@ class MainWindow(QMainWindow):
         except:
             logger.exception('Exception while cleanup')
         logger.debug('thread cleanup finished')
+
+    def request_api_key(self,):
+        window = KeyRequest(parent=self)
+        if window.exec_():
+            apikey = window.lineEdit_apikey.text()
+            if apikey:
+                set_api_key(apikey)
+                return apikey
+            return DEFAULT_API_KEY
+
+        sys.exit(0)
 
 
     @pyqtSlot()

@@ -16,6 +16,9 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
+"""
+misc funtions
+"""
 
 import logging
 import sys
@@ -28,15 +31,21 @@ except:
 
 from pkg_resources import resource_filename
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 def get_QSettings():
+    """
+    return a QSettings instanze
+    """
     settings = QSettings()
     settings.setIniCodec('utf-8')
-    logger.debug('QSettings format set to: %s' % settings.format())
+    LOGGER.debug('QSettings format set to: %s', settings.format())
     return settings
 
 def get_file_path(relativ_path):
+    """
+    file path abstraction for pyinstaller
+    """
 
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relativ_path)

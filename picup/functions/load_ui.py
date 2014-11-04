@@ -27,11 +27,10 @@ try:
     from PyQt5.uic import loadUi, loadUiType
 except ImportError:
     from PyQt4.uic import loadUi, loadUiType
-from pkg_resources import resource_filename
 
 from picup.functions.misc import get_file_path
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 def load_ui(file_name, baseinstance=None):
     """
@@ -39,13 +38,16 @@ def load_ui(file_name, baseinstance=None):
     """
     file_path = get_file_path(path.join('ui_files', file_name))
 
-    logger.debug('load ui file %s', file_path)
+    LOGGER.debug('load ui file %s', file_path)
 
     return loadUi(file_path, baseinstance)
 
 def load_ui_factory(file_name):
+    """
+    loads a ui factory
+    """
     file_path = get_file_path(path.join('ui_files', file_name))
 
-    logger.debug('create factory from %s', file_name)
+    LOGGER.debug('create factory from %s', file_name)
 
     return loadUiType(file_path)

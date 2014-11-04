@@ -16,6 +16,9 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
+"""
+some arbitrary functions
+"""
 
 from picup.functions.load_ui import load_ui, load_ui_factory
 from picup.functions.api_key import get_api_key

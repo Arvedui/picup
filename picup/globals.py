@@ -21,6 +21,8 @@ import sys
 
 from os import path
 
+__version__ = '0.2'
+
 BASEDIR = path.dirname(path.abspath(sys.argv[0]))
 
 DEFAULT_API_KEY = 'f4Shgrf6E'
