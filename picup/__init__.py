@@ -28,7 +28,7 @@ try:
     from PyQt5.QtCore import QSettings
     PYQT_VERSION = 5
 except ImportError:
-    # setting PyQt apiversion to 2, where possible
+    # setting PyQt api version to 2, where possible
     import sip
     sip.setapi('QDate', 2)
     sip.setapi('QDateTime', 2)
