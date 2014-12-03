@@ -44,7 +44,7 @@ class MainWindow(QMainWindow):
     upload_pictures = pyqtSignal(list)
 
     def __init__(self, **kwargs):
-        super(MainWindow, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
         load_ui('MainWindow.ui', self)
         self.setWindowTitle('Picup - {}'.format(__version__))
@@ -195,7 +195,7 @@ class MainWindow(QMainWindow):
 
 class FileListModel(QAbstractListModel):
     def __init__(self, **kwargs):
-        super(FileListModel, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
         self.files = []
 
@@ -217,7 +217,7 @@ class FileListModel(QAbstractListModel):
     @pyqtSlot()
     def clear_list(self,):
         self.beginRemoveRows(QModelIndex(), 0, len(self.files)-1)
-        del self.files[:] # for python2 compatibility
+        self.files.clear()
         self.endRemoveRows()
 
     def remove_element(self, first, last):

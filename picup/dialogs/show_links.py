@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 class ShowLinks(QDialog):
 
     def __init__(self, upload_thread, amount_links, **kwargs):
-        super(ShowLinks, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         load_ui('LinkDialog.ui', self)
 
         self.linkmodel = LinkListModel()
@@ -125,7 +125,7 @@ class ShowLinks(QDialog):
 class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
 
     def __init__(self, data, **kwargs):
-        super(LinkWidget, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.setupUi(self)
         filename, type_, links = data
 
@@ -165,7 +165,7 @@ class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
 
 class LinkListModel(QAbstractListModel):
     def __init__(self, **kwargs):
-        super(LinkListModel, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
         self.links = []
         self.linktype = "sharelink"

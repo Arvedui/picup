@@ -43,7 +43,7 @@ class Upload(QObject):
 
 
     def __init__(self, apikey):
-        QObject.__init__(self, parent=None,)
+        super().__init__()
         self.uploader = PicflashUpload(apikey=apikey)
 
     @pyqtSlot(list)

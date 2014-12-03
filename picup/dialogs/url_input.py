@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 class UrlInput(QDialog):
 
     def __init__(self, **kwargs):
-        super(UrlInput, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         load_ui('link_input.ui', self)
 
         self.buttonBox.rejected.connect(self.reject)
