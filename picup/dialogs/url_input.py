@@ -18,13 +18,8 @@
 ######################### END LICENSE BLOCK #########################
 
 
-try:
-    from PyQt5.QtWidgets import QDialog
-    from PyQt5.QtCore import pyqtSlot
-
-except ImportError:
-    from PyQt4.QtGui import QDialog
-    from PyQt4.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QDialog
+from PyQt5.QtCore import pyqtSlot
 
 
 from picup.functions import load_ui

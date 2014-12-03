@@ -23,12 +23,10 @@ Module for upload abstraction
 from retrying import retry
 
 from picuplib import Upload as PicflashUpload
-try:
-    from PyQt5.QtCore import QThread, pyqtSignal, Qt, QObject, pyqtSlot
-    from PyQt5.QtWidgets import QApplication
-except ImportError:
-    from PyQt4.QtCore import QThread, pyqtSignal, Qt, QObject, pyqtSlot
-    from PyQt4.QtGui import QApplication
+
+from PyQt5.QtCore import QThread, pyqtSignal, Qt, QObject, pyqtSlot
+from PyQt5.QtWidgets import QApplication
+
 
 import logging
 logger = logging.getLogger(__name__)

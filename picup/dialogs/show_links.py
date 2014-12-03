@@ -20,14 +20,10 @@ from __future__ import unicode_literals
 
 from os import path
 from requests import get
-try:
-    from PyQt5.QtWidgets import QDialog, QVBoxLayout, QWidget, QApplication, QFileDialog
-    from PyQt5.QtCore import Qt, pyqtSlot, QAbstractListModel, QModelIndex
-    from PyQt5.QtGui import QPixmap, QClipboard
-except ImportError:
-    from PyQt4.QtGui import (QDialog, QVBoxLayout, QWidget, QPixmap, QClipboard,
-                             QApplication, QFileDialog)
-    from PyQt4.QtCore import Qt, pyqtSlot, QAbstractListModel, QModelIndex
+from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QWidget, QApplication,
+                             QFileDialog)
+from PyQt5.QtCore import Qt, pyqtSlot, QAbstractListModel, QModelIndex
+from PyQt5.QtGui import QPixmap, QClipboard
 
 from picup.functions import load_ui, load_ui_factory
 from picup.globals import BB_TEMPLTATE, LINKTYPES, LINKTYPE_ORDER

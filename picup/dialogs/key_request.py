@@ -17,10 +17,8 @@
 # Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 ######################### END LICENSE BLOCK #########################
 
-try:
-    from PyQt5.QtWidgets import QDialog
-except ImportError:
-    from PyQt4.QtGui import QDialog
+
+from PyQt5.QtWidgets import QDialog
 
 
 from picup.functions import load_ui

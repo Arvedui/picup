@@ -23,10 +23,7 @@ module for loding ui files
 import logging
 
 from os import path
-try:
-    from PyQt5.uic import loadUi, loadUiType
-except ImportError:
-    from PyQt4.uic import loadUi, loadUiType
+from PyQt5.uic import loadUi, loadUiType
 
 from picup.functions.misc import get_file_path
 

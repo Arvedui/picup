@@ -18,16 +18,9 @@
 ######################### END LICENSE BLOCK #########################
 from __future__ import unicode_literals
 
-try:
-    from PyQt5.QtWidgets import (QMainWindow, QFileDialog, QMessageBox,
-                                 QMessageBox)
-    from PyQt5.QtCore import (QAbstractListModel, Qt, QModelIndex, QThread,
-                              pyqtSlot, pyqtSignal)
-except ImportError:
-    from PyQt4.QtGui import (QMainWindow, QFileDialog, QMessageBox, QMessageBox,
-                             QInputDialog)
-    from PyQt4.QtCore import (QAbstractListModel, Qt, QModelIndex, QThread,
-                              pyqtSlot, pyqtSignal)
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QMessageBox
+from PyQt5.QtCore import (QAbstractListModel, Qt, QModelIndex, QThread,
+                          pyqtSlot, pyqtSignal)
 
 from picuplib.globals import ALLOWED_RESIZE, ALLOWED_ROTATION
 

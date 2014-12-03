@@ -24,10 +24,7 @@ import logging
 import sys
 import os.path
 
-try:
-    from PyQt5.QtCore import QSettings
-except:
-    from PyQt4.QtCore import QSettings
+from PyQt5.QtCore import QSettings
 
 from pkg_resources import resource_filename
 
