@@ -21,11 +21,9 @@ from picup.globals import __version__
 
 import sys
 
-PYQT_VERSION = None
 
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QSettings
-PYQT_VERSION = 5
 
 from picup.main_window import MainWindow
 
@@ -40,7 +38,6 @@ handler.setFormatter(formatter)
 handler.setLevel(logging.DEBUG)
 logger.addHandler(handler)
 
-logger.info('using PyQt version %i', PYQT_VERSION)
 
 def main():
     app = QApplication(sys.argv)
