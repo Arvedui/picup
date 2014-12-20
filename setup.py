@@ -30,7 +30,6 @@ setup(
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX',
         'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
-        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 3',
         'Environment :: X11 Applications :: Qt',
         ]
