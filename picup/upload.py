@@ -41,7 +41,6 @@ class Upload(QObject):
     upload_finished = pyqtSignal()
     upload_error = pyqtSignal(type, tuple)
 
-
     def __init__(self, apikey):
         super().__init__()
         self.uploader = PicflashUpload(apikey=apikey)
@@ -64,7 +63,7 @@ class Upload(QObject):
 
                 self.picture_uploaded.emit((file_, type_, links))
                 logger.info('Uploaded %s', file_)
-            except Exception as e: # yes in know its bad, but catching every possbile exception is necessary here, because missing one could result in a stucking ui
+            except Exception as e:  # yes in know its bad, …
                 self.upload_error.emit(type(e), e.args)
                 logger.exception('some exception happend')
 
@@ -82,9 +81,6 @@ class Upload(QObject):
             links = self.uploader.remote_upload(file_)
 
         return links
-
-
-
 
     @pyqtSlot(str)
     def change_default_rotation(self, rotation):

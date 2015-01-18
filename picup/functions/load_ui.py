@@ -29,6 +29,7 @@ from picup.functions.misc import get_file_path
 
 LOGGER = logging.getLogger(__name__)
 
+
 def load_ui(file_name, baseinstance=None):
     """
     loads a ui file und return the resulting object
@@ -38,6 +39,7 @@ def load_ui(file_name, baseinstance=None):
     LOGGER.debug('load ui file %s', file_path)
 
     return loadUi(file_path, baseinstance)
+
 
 def load_ui_factory(file_name):
     """

@@ -33,6 +33,7 @@ LINK_WIDGET_UI_CLASS, LINK_WIDGET_BASE_CLASS = load_ui_factory('LinkWidget.ui')
 import logging
 logger = logging.getLogger(__name__)
 
+
 class ShowLinks(QDialog):
 
     def __init__(self, upload_thread, amount_links, **kwargs):
@@ -54,14 +55,11 @@ class ShowLinks(QDialog):
         self.upload_thread.picture_uploaded.connect(self.add_entry)
         self.upload_thread.upload_finished.connect(self.upload_finished)
         self.comboBox_link_output.activated['QString'].connect(
-                        self.linkmodel.set_linktype)
+            self.linkmodel.set_linktype)
         self.pushButton_to_clipboard.clicked.connect(self.copy_to_clipboard)
         self.pushButton_to_file.clicked.connect(self.copy_to_file)
 
-
         self.comboBox_link_output.addItems(LINKTYPE_ORDER)
-
-
 
     def update_progress(self):
         value = self.progressBar_upload.value()
@@ -121,7 +119,6 @@ class ShowLinks(QDialog):
                 file_obj.write(self.gen_string())
 
 
-
 class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
 
     def __init__(self, data, **kwargs):
@@ -146,7 +143,6 @@ class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
         if len(filename) > 50:
             filename = filename[:50] + ' … ' + filename[-4:]
         self.groupBox.setTitle(filename)
-
 
         self.lineEdit_sharelink.setText(links['sharelink'])
         self.lineEdit_hotlink.setText(links['hotlink'])

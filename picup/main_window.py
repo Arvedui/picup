@@ -59,7 +59,6 @@ class MainWindow(QMainWindow):
         self.upload_thread.start()
         self.upload.moveToThread(self.upload_thread)
 
-
         self.listView_files_model = FileListModel()
         self.listView_files.setModel(self.listView_files_model)
 
@@ -81,11 +80,11 @@ class MainWindow(QMainWindow):
         self.dialog.setNameFilters(SUPPORTED_FILE_TYPES)
 
         self.comboBox_resize_options.activated['QString'].connect(
-                    self.upload.change_default_resize)
+            self.upload.change_default_resize)
         self.comboBox_rotate_options.activated['QString'].connect(
-                    self.upload.change_default_rotation)
+            self.upload.change_default_rotation)
         self.checkBox_delete_exif.toggled.connect(
-                    self.upload.change_default_exif)
+            self.upload.change_default_exif)
 
         self.comboBox_resize_options.addItem('')
         for item in ALLOWED_RESIZE:
@@ -94,6 +93,11 @@ class MainWindow(QMainWindow):
             self.comboBox_resize_options.addItem(item)
 
         self.comboBox_rotate_options.addItems(ALLOWED_ROTATION)
+
+        # Menubar stuff
+        self.about_menu = self.menubar.addMenu("?")
+        self.about_qt = self.about_menu.addAction('Über Qt')
+        self.about_qt.triggered.connect(self.display_about_qt)
 
     def __del__(self):
         logger.debug('begin cleanup threads')
@@ -114,12 +118,12 @@ class MainWindow(QMainWindow):
 
         sys.exit(0)
 
-
     @pyqtSlot()
     def add_file(self):
         if self.dialog.exec_():
             files = self.dialog.selectedFiles()
-            self.listView_files_model.add_files([(file_, 'file') for file_ in files])
+            files = [(file_, 'file') for file_ in files]
+            self.listView_files_model.add_files(files)
 
     @pyqtSlot()
     def add_url(self,):
@@ -142,12 +146,11 @@ class MainWindow(QMainWindow):
 
             if not_added:
                 message = QMessageBox(QMessageBox.Warning, 'Fehler',
-                                      'Ein oder mehrere link(s) konnten nicht hinzugefügt werden.',
+                                      ('Ein oder mehrere link(s) konnten '
+                                       'nicht hinzugefügt werden.'),
                                       buttons=QMessageBox.Ok,
                                       parent=self)
                 message.setDetailedText('\n'.join(not_added))
-
-
 
             self.listView_files_model.add_files(new_entrys)
 
@@ -168,11 +171,14 @@ class MainWindow(QMainWindow):
             self.listView_files_model.clear_list()
         elif self.upload_in_progress:
             logger.debug('Upload already in progress.')
-            QMessageBox.warning(self, 'Upload Läuft', 'Es läuft bereits ein Upload Prozess.')
+            QMessageBox.warning(self, 'Upload Läuft',
+                                'Es läuft bereits ein Upload Prozess.')
 
         else:
             logger.info('There is nothing to upload.')
-            QMessageBox.information(self, 'Nüx da', 'Es wurden keine bilder zum hochladen hinzugefügt')
+            QMessageBox.information(self, 'Nüx da',
+                                    ('Es wurden keine bilder zum hochladen '
+                                     'hinzugefügt'))
 
     @pyqtSlot()
     def upload_finished(self, ):
@@ -192,6 +198,10 @@ class MainWindow(QMainWindow):
         for item in self.listView_files.selectedIndexes():
             self.listView_files_model.remove_element(item.row(), item.row())
 
+    @pyqtSlot()
+    def display_about_qt(self,):
+        QMessageBox.aboutQt(self,)
+
 
 class FileListModel(QAbstractListModel):
     def __init__(self, **kwargs):
@@ -205,7 +215,6 @@ class FileListModel(QAbstractListModel):
     def data(self, index, role):
         if role == Qt.DisplayRole:
             return self.files[index.row()][0]
-
 
     def add_files(self, files):
         prev_len = len(self.files)

@@ -26,6 +26,7 @@ from picup.functions.misc import get_QSettings
 import logging
 LOGGER = logging.getLogger(__name__)
 
+
 def get_api_key():
     """
     reads apikey from Qt Settings, if not present return None

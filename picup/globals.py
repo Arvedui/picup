@@ -37,8 +37,8 @@ SUPPORTED_FILE_TYPES = (
 BB_TEMPLTATE = '[url={}][img]{}[/img][/url]'
 
 LINKTYPES = {'Sharelink': 'sharelink',
-             'Direktlink':'hotlink',
-             'Vorschau':'thumbnail',
+             'Direktlink': 'hotlink',
+             'Vorschau': 'thumbnail',
              'BB Direktlink': 'bb_hotlink',
              'BB Vorschau': 'bb_thumbnail',
              'Lösch Link': 'delete_url'}
