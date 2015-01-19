@@ -20,7 +20,7 @@ from __future__ import unicode_literals
 
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QMessageBox
 from PyQt5.QtCore import (QAbstractListModel, Qt, QModelIndex, QThread,
-                          pyqtSlot, pyqtSignal)
+                          pyqtSlot, pyqtSignal, QCoreApplication)
 
 from picuplib.globals import ALLOWED_RESIZE, ALLOWED_ROTATION
 
@@ -62,7 +62,7 @@ class MainWindow(QMainWindow):
         self.listView_files_model = FileListModel()
         self.listView_files.setModel(self.listView_files_model)
 
-        self.pushButton_close.clicked.connect(self.close)
+        self.pushButton_close.clicked.connect(self.shutdown)
         self.pushButton_add_picture.clicked.connect(self.add_file)
         self.pushButton_add_links.clicked.connect(self.add_url)
         self.pushButton_upload.clicked.connect(self.start_upload)
@@ -98,14 +98,6 @@ class MainWindow(QMainWindow):
         self.about_menu = self.menubar.addMenu("?")
         self.about_qt = self.about_menu.addAction('Über Qt')
         self.about_qt.triggered.connect(self.display_about_qt)
-
-    def __del__(self):
-        logger.debug('begin cleanup threads')
-        try:
-            self.upload_thread.quit()
-        except:
-            logger.exception('Exception while cleanup')
-        logger.debug('thread cleanup finished')
 
     def request_api_key(self,):
         window = KeyRequest(parent=self)
@@ -201,6 +193,22 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def display_about_qt(self,):
         QMessageBox.aboutQt(self,)
+
+    @pyqtSlot()
+    def shutdown(self,):
+        "shut down Qapp"
+        self.thread_cleanup()
+
+        QCoreApplication.instance().quit()
+
+    def thread_cleanup(self):
+        logger.debug('begin cleanup threads')
+        try:
+            self.upload_thread.quit()
+        except:
+            logger.exception('Exception while cleanup')
+        logger.debug('thread cleanup finished')
+
 
 
 class FileListModel(QAbstractListModel):
