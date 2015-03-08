@@ -95,9 +95,9 @@ class MainWindow(QMainWindow):
         self.comboBox_rotate_options.addItems(ALLOWED_ROTATION)
 
         # Menubar stuff
-        self.about_menu = self.menubar.addMenu("?")
-        self.about_qt = self.about_menu.addAction('Über Qt')
-        self.about_qt.triggered.connect(self.display_about_qt)
+        #self.about_menu = self.menubar.addMenu("?")
+        #self.about_qt = self.about_menu.addAction('Über Qt')
+        #self.about_qt.triggered.connect(self.display_about_qt)
 
     def request_api_key(self,):
         window = KeyRequest(parent=self)
