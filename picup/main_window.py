@@ -128,6 +128,9 @@ class MainWindow(QMainWindow):
 
         if code and urls != '':
             for url in urls.split('\n'):
+                # skip empty lines
+                if url == '':
+                    continue
                 parsed_url = urlparse(url, scheme='http')
                 scheme = parsed_url.scheme.lower()
                 if scheme in ['http', 'https', 'ftp']:
