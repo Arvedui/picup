@@ -21,7 +21,7 @@ from __future__ import unicode_literals
 from os import path
 from requests import get
 from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QWidget, QApplication,
-                             QFileDialog)
+                             QFileDialog, QMessageBox)
 from PyQt5.QtCore import Qt, pyqtSlot, QAbstractListModel, QModelIndex
 from PyQt5.QtGui import QPixmap, QClipboard
 
@@ -65,11 +65,18 @@ class ShowLinks(QDialog):
         value = self.progressBar_upload.value()
         self.progressBar_upload.setValue(value+1)
 
-    @pyqtSlot()
-    def upload_finished(self):
+    @pyqtSlot(list)
+    def upload_finished(self, failed):
         logger.debug('recieved upload finished signal. beginn cleanup')
 
         self.progressBar_upload.hide()
+
+        if failed:
+            logger.info("%s upload(s) failed", len(failed))
+            message = QMessageBox()
+            message.setText('Eine oder mehrere Dateien konnten nicht hochgaladen werden.')
+            message.setDetailedText('\n'.join(failed))
+            message.exec_()
 
         self.upload_thread.picture_uploaded.disconnect(self.add_entry)
         self.upload_thread.upload_finished.disconnect(self.upload_finished)

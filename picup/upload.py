@@ -38,7 +38,7 @@ class Upload(QObject):
     """
 
     picture_uploaded = pyqtSignal(tuple)
-    upload_finished = pyqtSignal()
+    upload_finished = pyqtSignal(list)
     upload_error = pyqtSignal(type, tuple)
 
     def __init__(self, apikey):
@@ -64,13 +64,15 @@ class Upload(QObject):
                 self.picture_uploaded.emit((file_, type_, links))
                 logger.info('Uploaded %s', file_)
             except Exception as e:  # yes in know its bad, …
-                self.upload_error.emit(type(e), e.args)
-                logger.exception('some exception happend')
+                #self.upload_error.emit(type(e), e.args)
+                failed.append(file_)
+                logger.exception('An exception happend durring the upload of %s.', file_)
 
-        self.upload_finished.emit()
+        print(failed)
+        self.upload_finished.emit(failed)
         logging.info('upload finished')
 
-    @retry(stop_max_attempt_number=3)
+    #@retry(stop_max_attempt_number=3)
     def upload(self, file_, type_):
         """
         hands over the upload to picuplib will retry three times
