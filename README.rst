@@ -12,4 +12,3 @@ Requirements:
 - PyQt5
 
 - picuplib
-- retrying

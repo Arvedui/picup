@@ -71,7 +71,6 @@ class Upload(QObject):
         self.upload_finished.emit(failed)
         logging.info('upload finished')
 
-    #@retry(stop_max_attempt_number=3)
     def upload(self, file_, type_):
         """
         hands over the upload to picuplib will retry three times
