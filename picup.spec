@@ -1,16 +1,17 @@
 # -*- mode: python -*-
+
+block_cipher = None
+
+
 a = Analysis(['picup.py'],
              pathex=['c:\\Users\\pydep\\python\\picup'],
-             hiddenimports=[],
+             hiddenimports=["sip"],
              hookspath=None,
-             runtime_hooks=['pyinstaller_hook/pyqt4_runtime_hook.py'])
-# small hack for avoiding warning on startup
-for d in a.datas:
-  if 'include' in d[0]:
-    a.datas.remove(d)
-
-
-pyz = PYZ(a.pure)
+             runtime_hooks=None,
+             excludes=None,
+             cipher=block_cipher)
+pyz = PYZ(a.pure,
+             cipher=block_cipher)
 ui_tree = Tree('picup/ui_files', prefix='ui_files')
 exe = EXE(pyz,
           a.scripts,
@@ -22,4 +23,4 @@ exe = EXE(pyz,
           debug=False,
           strip=None,
           upx=True,
-          console=False)
+          console=False )

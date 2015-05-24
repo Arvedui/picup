@@ -20,7 +20,6 @@
 Module for upload abstraction
 """
 
-from retrying import retry
 
 from picuplib import Upload as PicflashUpload
 
