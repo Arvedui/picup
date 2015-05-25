@@ -22,7 +22,7 @@ import sys
 
 from os import path
 
-__version__ = '0.3'
+__version__ = '0.4'
 
 BASEDIR = path.dirname(path.abspath(sys.argv[0]))
 
