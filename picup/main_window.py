@@ -157,6 +157,7 @@ class MainWindow(QMainWindow):
             files = self.listView_files_model.files[:]
 
             link_dialog = ShowLinks(self.upload, len(files), parent=self)
+            link_dialog.readd_pictures.connect(self.listView_files_model.add_files)
             link_dialog.show()
 
             logger.debug('emitting upload signal with arguments: %s', files)
@@ -227,6 +228,7 @@ class FileListModel(QAbstractListModel):
         if role == Qt.DisplayRole:
             return self.files[index.row()][0]
 
+    @pyqtSlot(list)
     def add_files(self, files):
         prev_len = len(self.files)
 

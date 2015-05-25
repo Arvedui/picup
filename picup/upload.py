@@ -64,10 +64,9 @@ class Upload(QObject):
                 logger.info('Uploaded %s', file_)
             except Exception as e:  # yes in know its bad, …
                 #self.upload_error.emit(type(e), e.args)
-                failed.append(file_)
+                failed.append((file_, type_))
                 logger.exception('An exception happend durring the upload of %s.', file_)
 
-        print(failed)
         self.upload_finished.emit(failed)
         logging.info('upload finished')
 

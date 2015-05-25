@@ -22,7 +22,8 @@ from os import path
 from requests import get
 from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QWidget, QApplication,
                              QFileDialog, QMessageBox)
-from PyQt5.QtCore import Qt, pyqtSlot, QAbstractListModel, QModelIndex
+from PyQt5.QtCore import (Qt, pyqtSignal, pyqtSlot, QAbstractListModel,
+                          QModelIndex)
 from PyQt5.QtGui import QPixmap, QClipboard
 
 from picup.functions import load_ui, load_ui_factory
@@ -35,6 +36,8 @@ logger = logging.getLogger(__name__)
 
 
 class ShowLinks(QDialog):
+
+    readd_pictures = pyqtSignal(list)
 
     def __init__(self, upload_thread, amount_links, **kwargs):
         super().__init__(**kwargs)
@@ -73,10 +76,16 @@ class ShowLinks(QDialog):
 
         if failed:
             logger.info("%s upload(s) failed", len(failed))
-            message = QMessageBox()
-            message.setText('Eine oder mehrere Dateien konnten nicht hochgaladen werden.')
-            message.setDetailedText('\n'.join(failed))
-            message.exec_()
+            text = ('Eine oder mehrere Dateien konnten nicht hochgaladen werden.\n'
+                    'Bilder in der Liste behalten?')
+            message = QMessageBox(QMessageBox.Warning, "Fehler beim upload",
+                                  text, parent=self,
+                                  buttons=QMessageBox.Yes | QMessageBox.No)
+            url_list = [x[0] for x in failed]
+            message.setDetailedText('\n'.join(url_list))
+            if message.exec_() == QMessageBox.Yes:
+                logger.debug('readding %s link(s)', len(failed))
+                self.readd_pictures.emit(failed)
 
         self.upload_thread.picture_uploaded.disconnect(self.add_entry)
         self.upload_thread.upload_finished.disconnect(self.upload_finished)
