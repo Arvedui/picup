@@ -76,7 +76,7 @@ class ShowLinks(QDialog):
 
         if failed:
             logger.info("%s upload(s) failed", len(failed))
-            text = ('Eine oder mehrere Dateien konnten nicht hochgaladen werden.\n'
+            text = ('Eine oder mehrere Dateien konnten nicht hochgeladen werden.\n'
                     'Bilder in der Liste behalten?')
             message = QMessageBox(QMessageBox.Warning, "Fehler beim upload",
                                   text, parent=self,
