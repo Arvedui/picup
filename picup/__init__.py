@@ -28,15 +28,8 @@ from PyQt5.QtCore import QSettings
 from picup.main_window import MainWindow
 
 import logging
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.ERROR)
 
-logger.propagete = False
-handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-handler.setLevel(logging.DEBUG)
-logger.addHandler(handler)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 
 
 def main():
