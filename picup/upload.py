@@ -7,12 +7,11 @@ Module for upload abstraction
 
 from picuplib import Upload as PicflashUpload
 
-from PyQt5.QtCore import QThread, pyqtSignal, Qt, QObject, pyqtSlot
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtCore import pyqtSignal, QObject, pyqtSlot
 
 
 import logging
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 class Upload(QObject):
@@ -35,8 +34,8 @@ class Upload(QObject):
 
         files is a list of tuples (filename, type)
         """
-        logger.info('starting upload process')
-        logger.debug('recived file paths: %s', files)
+        LOGGER.info('starting upload process')
+        LOGGER.debug('recived file paths: %s', files)
 
         failed = []
 
@@ -45,11 +44,15 @@ class Upload(QObject):
                 links = self.upload(file_, type_)
 
                 self.picture_uploaded.emit((file_, type_, links))
-                logger.info('Uploaded %s', file_)
-            except Exception as e:  # yes in know its bad, …
-                #self.upload_error.emit(type(e), e.args)
+                LOGGER.info('Uploaded %s', file_)
+            # pylint: disable=broad-except
+            # the amount of possible exceptions is just to big
+            except Exception:  # yes in know its bad, …
                 failed.append((file_, type_))
-                logger.exception('An exception happend durring the upload of %s.', file_)
+                LOGGER.exception(
+                        'An exception happend durring the upload of %s.',
+                        file_
+                        )
 
         self.upload_finished.emit(failed)
         logging.info('upload finished')
@@ -70,7 +73,7 @@ class Upload(QObject):
         """
         changes the default rotation in the underlying Upload class
         """
-        logger.debug('Default rotation changed to %s', rotation)
+        LOGGER.debug('Default rotation changed to %s', rotation)
         self.uploader.rotation = rotation
 
     @pyqtSlot(str)
@@ -81,7 +84,7 @@ class Upload(QObject):
         if resize == '':
             resize = 'og'
 
-        logger.debug('Default resize changed to %s', resize)
+        LOGGER.debug('Default resize changed to %s', resize)
 
         self.uploader.resize = resize
 
@@ -90,5 +93,5 @@ class Upload(QObject):
         """
         chages the default exif parameter in the underlying Upload class
         """
-        logger.debug('Default exif deletion changed to %s', delete_exif)
+        LOGGER.debug('Default exif deletion changed to %s', delete_exif)
         self.uploader.noexif = delete_exif

@@ -1,4 +1,7 @@
 # -*- coding:utf8 -*-
+"""
+Module for everything related to showing the links and the upload status.
+"""
 
 from __future__ import unicode_literals
 
@@ -8,18 +11,22 @@ from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QWidget, QApplication,
                              QFileDialog, QMessageBox)
 from PyQt5.QtCore import (Qt, pyqtSignal, pyqtSlot, QAbstractListModel,
                           QModelIndex)
-from PyQt5.QtGui import QPixmap, QClipboard
+from PyQt5.QtGui import QPixmap
 
 from picup.functions import load_ui, load_ui_factory
 from picup.globals import BB_TEMPLTATE, LINKTYPES, LINKTYPE_ORDER
+import logging
 
 LINK_WIDGET_UI_CLASS, LINK_WIDGET_BASE_CLASS = load_ui_factory('LinkWidget.ui')
 
-import logging
-logger = logging.getLogger(__name__)
+
+LOGGER = logging.getLogger(__name__)
 
 
 class ShowLinks(QDialog):
+    """
+    Dialog which contains the upload status and the links returned by the api
+    """
 
     readd_pictures = pyqtSignal(list)
 
@@ -42,25 +49,32 @@ class ShowLinks(QDialog):
         self.upload_thread.picture_uploaded.connect(self.add_entry)
         self.upload_thread.upload_finished.connect(self.upload_finished)
         self.comboBox_link_output.activated['QString'].connect(
-            self.linkmodel.set_linktype)
+                self.linkmodel.set_linktype)
         self.pushButton_to_clipboard.clicked.connect(self.copy_to_clipboard)
         self.pushButton_to_file.clicked.connect(self.copy_to_file)
 
         self.comboBox_link_output.addItems(LINKTYPE_ORDER)
 
     def update_progress(self):
+        """
+        updates the upload progess widget
+        """
         value = self.progressBar_upload.value()
         self.progressBar_upload.setValue(value+1)
 
     @pyqtSlot(list)
     def upload_finished(self, failed):
-        logger.debug('recieved upload finished signal. beginn cleanup')
+        """
+        cleans up stuff after the upload finished
+        """
+        LOGGER.debug('recieved upload finished signal. beginn cleanup')
 
         self.progressBar_upload.hide()
 
         if failed:
-            logger.info("%s upload(s) failed", len(failed))
-            text = ('Eine oder mehrere Dateien konnten nicht hochgeladen werden.\n'
+            LOGGER.info("%s upload(s) failed", len(failed))
+            text = ('Eine oder mehrere Dateien '
+                    'konnten nicht hochgeladen werden.\n'
                     'Bilder in der Liste behalten?')
             message = QMessageBox(QMessageBox.Warning, "Fehler beim upload",
                                   text, parent=self,
@@ -68,15 +82,18 @@ class ShowLinks(QDialog):
             url_list = [x[0] for x in failed]
             message.setDetailedText('\n'.join(url_list))
             if message.exec_() == QMessageBox.Yes:
-                logger.debug('readding %s link(s)', len(failed))
+                LOGGER.debug('readding %s link(s)', len(failed))
                 self.readd_pictures.emit(failed)
 
         self.upload_thread.picture_uploaded.disconnect(self.add_entry)
         self.upload_thread.upload_finished.disconnect(self.upload_finished)
-        logger.debug('finished cleanup')
+        LOGGER.debug('finished cleanup')
 
     @pyqtSlot(tuple)
     def add_entry(self, data):
+        """
+        adds an entry for an uploded picture.
+        """
         self.update_progress()
 
         links = data[2]
@@ -91,6 +108,9 @@ class ShowLinks(QDialog):
         self.scroll_area_layout.addWidget(widget)
 
     def gen_string(self,):
+        """
+        generets a string containing all links seperated by newlines.
+        """
         selection_text = []
         selection = self.listView_links.selectedIndexes()
         if selection:
@@ -105,21 +125,35 @@ class ShowLinks(QDialog):
 
     @pyqtSlot()
     def copy_to_clipboard(self,):
+        """
+        generates a string using gen_string()
+        and writes it to the clipboard
+        """
         string = self.gen_string()
 
         self.clipboard.setText(string)
 
     @pyqtSlot()
     def copy_to_file(self,):
+        """
+        generetes a string using gen_string()
+        and writes it to a file named by the user.
+        """
         filename = QFileDialog.getSaveFileName(self, 'test')
-        if type(filename) == tuple:
+        if isinstance(filename, tuple):
             filename = filename[0]
         if filename:
             with open(filename, 'w') as file_obj:
                 file_obj.write(self.gen_string())
 
 
+# pylint: disable=no-member,too-few-public-methods
+# gets many of its members at runtime through the "magic" base classes
 class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
+    """
+    widget for upload pictures, one for each picture.
+    contains some links as well as a thumbnail
+    """
 
     def __init__(self, data, **kwargs):
         super().__init__(**kwargs)
@@ -129,11 +163,11 @@ class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
         pixmap = QPixmap()
 
         if type_ == 'url':
-            logger.debug('load thumbnail from picflash')
+            LOGGER.debug('load thumbnail from picflash')
             thumbnail = get(links['thumbnail'])
             pixmap.loadFromData(thumbnail.content)
         else:
-            logger.debug('generate thumbnail from file %s', filename)
+            LOGGER.debug('generate thumbnail from file %s', filename)
             pixmap.load(filename)
 
         self.pixmap = pixmap.scaled(150, 150, Qt.KeepAspectRatio)
@@ -160,23 +194,44 @@ class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
 
 
 class LinkListModel(QAbstractListModel):
+    """
+    model for the links of uploaded pictures
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
         self.links = []
         self.linktype = "sharelink"
 
+
+    # pylint: disable=invalid-name,unused-argument
+    # this name is neccacary for a working ListModel implementation
+    # same counts for the argument
     def rowCount(self, parent):
+        """
+        returns the amount of rows
+        Required for a ListModel implementation.
+        """
         return len(self.links)
 
     def data(self, index, role=None):
+        """
+        returns requestet data.
+        Required for a ListModel implementation.
+        """
         if role == Qt.DisplayRole or not role:
             return self.links[index.row()][2][self.linktype]
 
     def get_all_rows(self,):
+        """
+        returns a list containing all rows.
+        """
         return [item[2][self.linktype] for item in self.links]
 
     def add_link(self, data):
+        """
+        adds a link to the model
+        """
         prev_len = len(self.links)
 
         self.beginInsertRows(QModelIndex(), prev_len, prev_len + 1)
@@ -185,6 +240,9 @@ class LinkListModel(QAbstractListModel):
 
     @pyqtSlot(str)
     def set_linktype(self, linktype):
+        """
+        sets a diferent linktype to be displayed
+        """
         self.beginResetModel()
         self.linktype = LINKTYPES[linktype]
         self.endResetModel()

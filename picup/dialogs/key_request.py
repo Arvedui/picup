@@ -1,4 +1,7 @@
 # -*- coding:utf8 -*-
+"""
+module for the KeyRequest dialog
+"""
 
 from PyQt5.QtWidgets import QDialog
 
@@ -7,6 +10,10 @@ from picup.functions import load_ui
 
 
 class KeyRequest(QDialog):
+    """
+    KeyRequest dialog.
+    gets an api key from the user.
+    """
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

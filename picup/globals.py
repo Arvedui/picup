@@ -1,4 +1,7 @@
 # -*- coding:utf8 -*-
+"""
+Some "constants" that might be referenced from mutliple places
+"""
 
 from __future__ import unicode_literals
 
@@ -13,9 +16,9 @@ BASEDIR = path.dirname(path.abspath(sys.argv[0]))
 DEFAULT_API_KEY = 'f4Shgrf6E'
 
 SUPPORTED_FILE_TYPES = (
-    'Erlaubte Formate (*.png *.jpg *.jpeg *.gif *.pdf)',
-    'Alle Dateien (*)'
-    )
+        'Erlaubte Formate (*.png *.jpg *.jpeg *.gif *.pdf)',
+        'Alle Dateien (*)'
+        )
 
 
 BB_TEMPLTATE = '[url={}][img]{}[/img][/url]'

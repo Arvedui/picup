@@ -14,7 +14,7 @@ from pkg_resources import resource_filename
 LOGGER = logging.getLogger(__name__)
 
 
-def get_QSettings():
+def get_settings():
     """
     return a QSettings instanze
     """
@@ -28,7 +28,10 @@ def get_file_path(relativ_path):
     """
     file path abstraction for pyinstaller
     """
-
+    # pylint: disable=no-member,protected-access
+    # _MEIPASS is there if executed in a pyinstaller package
+    # and access to private member is necacary to get he folder
+    # where pyinstaller extracted the application files
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relativ_path)
     else:

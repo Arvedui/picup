@@ -1,4 +1,7 @@
 # -*- coding:utf8 -*-
+"""
+module for the UrlInput dialog
+"""
 
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtCore import pyqtSlot
@@ -8,10 +11,13 @@ from picup.functions import load_ui
 
 
 import logging
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 class UrlInput(QDialog):
+    """
+    Dialog for entering text.
+    """
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -22,11 +28,22 @@ class UrlInput(QDialog):
 
     @pyqtSlot()
     def reject(self,):
+        """
+        closes dialog and returns an error
+        """
+        LOGGER.debug('Abborted by user.')
         self.done(False)
 
     @pyqtSlot()
     def accept(self,):
+        """
+        closses dialog
+        """
+        LOGGER.debug('Closed graceful by user.')
         self.done(True)
 
     def text(self,):
+        """
+        return the text entered into the dialog
+        """
         return self.plainTextEdit.toPlainText()

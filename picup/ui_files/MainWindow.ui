@@ -127,7 +127,7 @@
      </widget>
     </item>
     <item row="0" column="0" rowspan="8">
-     <widget class="QListView" name="listView_files">
+     <widget class="QListView" name="list_view_files">
       <property name="selectionMode">
        <enum>QAbstractItemView::ExtendedSelection</enum>
       </property>
@@ -151,7 +151,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>24</height>
+     <height>27</height>
     </rect>
    </property>
   </widget>
