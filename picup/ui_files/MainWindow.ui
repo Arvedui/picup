@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>812</width>
+    <height>633</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,35 +18,28 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="6" column="1">
-     <widget class="QPushButton" name="pushButton_clear_list">
+    <item row="4" column="1">
+     <widget class="QPushButton" name="pushButton_add_links">
       <property name="text">
-       <string>Liste leeren</string>
+       <string>Links Hinzufügen</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
+    <item row="6" column="1">
      <widget class="QPushButton" name="pushButton_remove_selected">
       <property name="text">
        <string>Auswahl entfernen</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
-     <widget class="QPushButton" name="pushButton_upload">
+    <item row="8" column="1">
+     <widget class="QPushButton" name="pushButton_close">
       <property name="text">
-       <string>Hochladen</string>
+       <string>Beenden</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
-     <widget class="QPushButton" name="pushButton_add_picture">
-      <property name="text">
-       <string>Bild hinzufügen</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1" rowspan="2">
+    <item row="1" column="1" rowspan="2">
      <widget class="QFrame" name="frame_file_info">
       <property name="minimumSize">
        <size>
@@ -63,37 +56,127 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QGroupBox" name="groupBox">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>210</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="title">
           <string/>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="check_box_resize">
             <property name="text">
              <string>Skalieren</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QComboBox" name="comboBox_resize_options"/>
+          <item row="1" column="0">
+           <widget class="QWidget" name="resize_container" native="true">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_4">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="text">
+                <string>Breite</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="label_5">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="text">
+                <string>Höhe</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QSpinBox" name="spin_box_width">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="specialValueText">
+                <string notr="true"/>
+               </property>
+               <property name="maximum">
+                <number>999999</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLabel" name="label_6">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="text">
+                <string>x</string>
+               </property>
+               <property name="textFormat">
+                <enum>Qt::PlainText</enum>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QSpinBox" name="spin_box_higth">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="buttonSymbols">
+                <enum>QAbstractSpinBox::NoButtons</enum>
+               </property>
+               <property name="specialValueText">
+                <string notr="true"/>
+               </property>
+               <property name="showGroupSeparator" stdset="0">
+                <bool>false</bool>
+               </property>
+               <property name="maximum">
+                <number>999999</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </item>
-          <item>
+          <item row="2" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>Rotieren(in °)</string>
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QComboBox" name="comboBox_rotate_options"/>
+          <item row="3" column="0">
+           <widget class="QComboBox" name="comboBox_rotate_options">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
           </item>
-          <item>
+          <item row="4" column="0">
            <widget class="QCheckBox" name="checkBox_delete_exif">
             <property name="text">
              <string>Exif Daten Löschen</string>
@@ -117,26 +200,37 @@
         </spacer>
        </item>
       </layout>
+      <zorder>groupBox</zorder>
+      <zorder>checkBox_delete_exif</zorder>
+      <zorder>checkBox_delete_exif</zorder>
+      <zorder>list_view_files</zorder>
      </widget>
     </item>
-    <item row="7" column="1">
-     <widget class="QPushButton" name="pushButton_close">
+    <item row="5" column="1">
+     <widget class="QPushButton" name="pushButton_upload">
       <property name="text">
-       <string>Beenden</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" rowspan="8">
-     <widget class="QListView" name="list_view_files">
-      <property name="selectionMode">
-       <enum>QAbstractItemView::ExtendedSelection</enum>
+       <string>Hochladen</string>
       </property>
      </widget>
     </item>
     <item row="3" column="1">
-     <widget class="QPushButton" name="pushButton_add_links">
+     <widget class="QPushButton" name="pushButton_add_picture">
       <property name="text">
-       <string>Links Hinzufügen</string>
+       <string>Bild hinzufügen</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="QPushButton" name="pushButton_clear_list">
+      <property name="text">
+       <string>Liste leeren</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" rowspan="8">
+     <widget class="QListView" name="list_view_files">
+      <property name="selectionMode">
+       <enum>QAbstractItemView::ExtendedSelection</enum>
       </property>
      </widget>
     </item>
@@ -150,7 +244,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>812</width>
      <height>27</height>
     </rect>
    </property>

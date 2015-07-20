@@ -6,6 +6,7 @@ Module for upload abstraction
 
 
 from picuplib import Upload as PicflashUpload
+from picuplib.exceptions import MallformedResize
 
 from PyQt5.QtCore import pyqtSignal, QObject, pyqtSlot
 
@@ -22,9 +23,10 @@ class Upload(QObject):
     picture_uploaded = pyqtSignal(tuple)
     upload_finished = pyqtSignal(list)
     upload_error = pyqtSignal(type, tuple)
+    legal_resize_string = pyqtSignal(bool)
 
-    def __init__(self, apikey):
-        super().__init__()
+    def __init__(self, apikey, **kwargs):
+        super().__init__(**kwargs)
         self.uploader = PicflashUpload(apikey=apikey)
 
     @pyqtSlot(list)
@@ -59,7 +61,7 @@ class Upload(QObject):
 
     def upload(self, file_, type_):
         """
-        hands over the upload to picuplib will retry three times
+        hands over the upload to picuplib
         """
         if type_ == 'file':
             links = self.uploader.upload(file_)
@@ -82,11 +84,16 @@ class Upload(QObject):
         changes the default resize parameter in the underlying Upload class
         """
         if resize == '':
-            resize = 'og'
+            resize = None
 
         LOGGER.debug('Default resize changed to %s', resize)
 
-        self.uploader.resize = resize
+        try:
+            self.uploader.resize = resize
+            self.legal_resize_string.emit(True)
+        except MallformedResize:
+            LOGGER.debug('illegal resize string.')
+            self.legal_resize_string.emit(False)
 
     @pyqtSlot(str)
     def change_default_exif(self, delete_exif):

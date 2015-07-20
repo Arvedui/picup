@@ -45,14 +45,15 @@ class MainWindow(QMainWindow):
         if not apikey:
             apikey = self.request_api_key()
 
+        self.legal_resize = True
         self.upload_in_progress = False
-        self.upload_thread = QThread()
+        self.upload_thread = QThread(parent=self)
         self.upload = Upload(apikey=apikey)
         self.upload_thread.start()
         self.upload.moveToThread(self.upload_thread)
 
 
-        self.list_view_files_model = FileListModel()
+        self.list_view_files_model = FileListModel(parent=self)
         self.list_view_files.setModel(self.list_view_files_model)
 
         self.pushButton_close.clicked.connect(self.shutdown)
@@ -72,18 +73,14 @@ class MainWindow(QMainWindow):
         self.dialog.setFileMode(QFileDialog.ExistingFiles)
         self.dialog.setNameFilters(SUPPORTED_FILE_TYPES)
 
-        self.comboBox_resize_options.activated['QString'].connect(
-                self.upload.change_default_resize)
+        self.resize_container.hide()
+        self.check_box_resize.clicked.connect(self.resize_container.setVisible)
+        self.spin_box_width.valueChanged.connect(self.update_resize)
+        self.spin_box_higth.valueChanged.connect(self.update_resize)
         self.comboBox_rotate_options.activated['QString'].connect(
                 self.upload.change_default_rotation)
         self.checkBox_delete_exif.toggled.connect(
                 self.upload.change_default_exif)
-
-        self.comboBox_resize_options.addItem('')
-        for item in ALLOWED_RESIZE:
-            if item == 'og':
-                continue
-            self.comboBox_resize_options.addItem(item)
 
         self.comboBox_rotate_options.addItems(ALLOWED_ROTATION)
 
@@ -158,7 +155,8 @@ class MainWindow(QMainWindow):
         finished.
         """
         if (len(self.list_view_files_model.files) and not
-                    self.upload_in_progress):
+                    self.upload_in_progress and
+                    self.legal_resize):
             self.upload_in_progress = True
             files = self.list_view_files_model.files.copy()
 
@@ -173,10 +171,18 @@ class MainWindow(QMainWindow):
 
             LOGGER.debug('cleanup main window')
             self.list_view_files_model.clear_list()
+
         elif self.upload_in_progress:
             LOGGER.debug('Upload already in progress.')
             QMessageBox.warning(self, 'Upload Läuft',
                                 'Es läuft bereits ein Upload Prozess.')
+
+        elif not self.legal_resize:
+            LOGGER.debug('illegal resize string will not upload.')
+            QMessageBox.warning(self, 'Auflösung ungültig',
+                                ('Die für die Skalierung angegebene Auflösung ist ungültig. '
+                                 'Bitte gib diese im folgendem format an: breite x höhe')
+                               )
 
         else:
             LOGGER.info('There is nothing to upload.')
@@ -202,6 +208,15 @@ class MainWindow(QMainWindow):
         message.setDetailedText(repr(exception_type) + '\n' + repr(args))
 
         message.exec_()
+
+    @pyqtSlot()
+    def update_resize(self):
+        width = self.spin_box_width.value()
+        higth = self.spin_box_higth.value()
+
+        self.upload.change_default_resize = "{}x{}".format(width, higth)
+
+
 
     @pyqtSlot()
     def remove_selected(self,):
@@ -232,6 +247,7 @@ class MainWindow(QMainWindow):
         LOGGER.debug('begin cleanup threads')
         try:
             self.upload_thread.quit()
+            self.upload_thread.wait()
         # pylint: disable=bare-except
         # I do want to catch them all here, to be able to log them.
         except:
