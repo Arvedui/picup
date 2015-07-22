@@ -214,8 +214,7 @@ class MainWindow(QMainWindow):
         width = self.spin_box_width.value()
         higth = self.spin_box_higth.value()
 
-        self.upload.change_default_resize = "{}x{}".format(width, higth)
-
+        self.upload.change_default_resize("{}x{}".format(width, higth))
 
 
     @pyqtSlot()
