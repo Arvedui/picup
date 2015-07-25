@@ -74,7 +74,7 @@ class MainWindow(QMainWindow):
         self.dialog.setNameFilters(SUPPORTED_FILE_TYPES)
 
         self.resize_container.hide()
-        self.check_box_resize.clicked.connect(self.resize_container.setVisible)
+        self.check_box_resize.clicked.connect(self.set_resize_box_visibility)
         self.spin_box_width.valueChanged.connect(self.update_resize)
         self.spin_box_higth.valueChanged.connect(self.update_resize)
         self.comboBox_rotate_options.activated['QString'].connect(
@@ -191,7 +191,7 @@ class MainWindow(QMainWindow):
                                      'hinzugefügt'))
 
     @pyqtSlot()
-    def upload_finished(self, ):
+    def upload_finished(self,):
         """
         called through a signal after upload is finished to release the lock.
         """
@@ -210,11 +210,22 @@ class MainWindow(QMainWindow):
         message.exec_()
 
     @pyqtSlot()
-    def update_resize(self):
+    def update_resize(self,):
         width = self.spin_box_width.value()
         higth = self.spin_box_higth.value()
 
         self.upload.change_default_resize("{}x{}".format(width, higth))
+
+    @pyqtSlot(bool)
+    def set_resize_box_visibility(self, visible):
+        if visible:
+            LOGGER.debug('show resize box')
+        else:
+            LOGGER.debug('hide resize box')
+            self.upload.change_default_resize(None)
+
+        self.resize_container.setVisible(visible)
+
 
 
     @pyqtSlot()
