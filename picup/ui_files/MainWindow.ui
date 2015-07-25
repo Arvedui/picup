@@ -212,10 +212,6 @@
         </spacer>
        </item>
       </layout>
-      <zorder>groupBox</zorder>
-      <zorder>checkBox_delete_exif</zorder>
-      <zorder>checkBox_delete_exif</zorder>
-      <zorder>list_view_files</zorder>
      </widget>
     </item>
     <item row="5" column="1">
@@ -257,7 +253,7 @@
      <x>0</x>
      <y>0</y>
      <width>812</width>
-     <height>27</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
