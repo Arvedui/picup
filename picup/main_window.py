@@ -74,9 +74,13 @@ class MainWindow(QMainWindow):
         self.dialog.setNameFilters(SUPPORTED_FILE_TYPES)
 
         self.resize_container.hide()
+        self.resize_container_percentual.hide()
         self.check_box_resize.clicked.connect(self.set_resize_box_visibility)
+        self.radio_button_absolute.toggled.connect(self.set_absolute_resize_box_visibility)
+        self.radio_button_percentual.toggled.connect(self.set_percentual_resize_box_visibility)
         self.spin_box_width.valueChanged.connect(self.update_resize)
         self.spin_box_higth.valueChanged.connect(self.update_resize)
+        self.spin_box_percentual.valueChanged.connect(self.update_resize)
         self.comboBox_rotate_options.activated['QString'].connect(
                 self.upload.change_default_rotation)
         self.checkBox_delete_exif.toggled.connect(
@@ -211,22 +215,52 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def update_resize(self,):
-        width = self.spin_box_width.value()
-        higth = self.spin_box_higth.value()
+        if (self.check_box_resize.isChecked() and
+                self.radio_button_absolute.isChecked()):
+            width = self.spin_box_width.value()
+            higth = self.spin_box_higth.value()
 
-        self.upload.change_default_resize("{}x{}".format(width, higth))
+            self.upload.change_default_resize("{}x{}".format(width, higth))
+
+        elif (self.check_box_resize.isChecked() and
+                self.radio_button_percentual.isChecked()):
+
+            percentage = self.spin_box_percentual.value()
+            self.upload.change_default_resize("{}%".format(percentage))
+
+        else:
+            self.upload.change_default_resize(None)
 
     @pyqtSlot(bool)
     def set_resize_box_visibility(self, visible):
         if visible:
             LOGGER.debug('show resize box')
+            self.update_resize()
         else:
             LOGGER.debug('hide resize box')
-            self.upload.change_default_resize(None)
+            self.update_resize()
 
         self.resize_container.setVisible(visible)
 
+    @pyqtSlot(bool)
+    def set_absolute_resize_box_visibility(self, visible):
+        if visible:
+            LOGGER.debug('show absolute resize box')
+            self.update_resize()
+        else:
+            LOGGER.debug('hide absolute resize box')
 
+        self.resize_container_absolute.setVisible(visible)
+
+    @pyqtSlot(bool)
+    def set_percentual_resize_box_visibility(self, visible):
+        if visible:
+            LOGGER.debug('show percentual resize box')
+            self.update_resize()
+        else:
+            LOGGER.debug('hide percentual resize box')
+
+        self.resize_container_percentual.setVisible(visible)
 
     @pyqtSlot()
     def remove_selected(self,):
