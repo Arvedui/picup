@@ -162,13 +162,10 @@ class LinkWidget(LINK_WIDGET_BASE_CLASS, LINK_WIDGET_UI_CLASS):
 
         pixmap = QPixmap()
 
-        if type_ == 'url':
-            LOGGER.debug('load thumbnail from picflash')
-            thumbnail = get(links['thumbnail'])
-            pixmap.loadFromData(thumbnail.content)
-        else:
-            LOGGER.debug('generate thumbnail from file %s', filename)
-            pixmap.load(filename)
+
+        LOGGER.debug('load thumbnail from picflash')
+        thumbnail = get(links['thumbnail'])
+        pixmap.loadFromData(thumbnail.content)
 
         self.pixmap = pixmap.scaled(150, 150, Qt.KeepAspectRatio)
         self.label_picture.setPixmap(self.pixmap)
