@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QMessageBox
 from PyQt5.QtCore import (QAbstractListModel, Qt, QModelIndex, QThread,
                           pyqtSlot, pyqtSignal, QCoreApplication)
 
-from picuplib.globals import ALLOWED_RESIZE, ALLOWED_ROTATION
+from picuplib.globals import ALLOWED_ROTATION
 
 from picup.functions import load_ui
 from picup.functions import get_api_key, set_api_key
@@ -75,16 +75,24 @@ class MainWindow(QMainWindow):
 
         self.resize_container.hide()
         self.resize_container_percentual.hide()
-        self.check_box_resize.clicked.connect(self.set_resize_box_visibility)
-        self.radio_button_absolute.toggled.connect(self.set_absolute_resize_box_visibility)
-        self.radio_button_percentual.toggled.connect(self.set_percentual_resize_box_visibility)
+        self.check_box_resize.clicked.connect(
+                self.set_resize_box_visibility
+                )
+        self.radio_button_absolute.toggled.connect(
+                self.set_absolute_resize_box_visibility
+                )
+        self.radio_button_percentual.toggled.connect(
+                self.set_percentual_resize_box_visibility
+                )
         self.spin_box_width.valueChanged.connect(self.update_resize)
         self.spin_box_higth.valueChanged.connect(self.update_resize)
         self.spin_box_percentual.valueChanged.connect(self.update_resize)
         self.comboBox_rotate_options.activated['QString'].connect(
-                self.upload.change_default_rotation)
+                self.upload.change_default_rotation
+                )
         self.checkBox_delete_exif.toggled.connect(
-                self.upload.change_default_exif)
+                self.upload.change_default_exif
+                )
 
         self.comboBox_rotate_options.addItems(ALLOWED_ROTATION)
 
@@ -183,6 +191,8 @@ class MainWindow(QMainWindow):
 
         elif not self.legal_resize:
             LOGGER.debug('illegal resize string will not upload.')
+            # pylint: disable=line-too-long
+            # would harm readability
             QMessageBox.warning(self, 'Auflösung ungültig',
                                 ('Die für die Skalierung angegebene Auflösung ist ungültig. '
                                  'Bitte gib diese im folgendem format an: breite x höhe')
@@ -216,14 +226,14 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def update_resize(self,):
         if (self.check_box_resize.isChecked() and
-                self.radio_button_absolute.isChecked()):
+            self.radio_button_absolute.isChecked()):
             width = self.spin_box_width.value()
             higth = self.spin_box_higth.value()
 
             self.upload.change_default_resize("{}x{}".format(width, higth))
 
         elif (self.check_box_resize.isChecked() and
-                self.radio_button_percentual.isChecked()):
+              self.radio_button_percentual.isChecked()):
 
             percentage = self.spin_box_percentual.value()
             self.upload.change_default_resize("{}%".format(percentage))
