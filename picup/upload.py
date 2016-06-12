@@ -95,7 +95,7 @@ class Upload(QObject):
             LOGGER.debug('illegal resize string.')
             self.legal_resize_string.emit(False)
 
-    @pyqtSlot(str)
+    @pyqtSlot(bool)
     def change_default_exif(self, delete_exif):
         """
         chages the default exif parameter in the underlying Upload class
